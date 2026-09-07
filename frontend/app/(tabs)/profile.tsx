@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   achieveBadge: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20 },
   achieveText: { fontSize: 13, fontWeight: "600" },
   profileCard: { borderRadius: 16, overflow: "hidden", shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 6, elevation: 1 },
-  profileRow: { flexDirection: "row", justifyContent: "space-between", padding: 14, borderBottomWidth: StyleSheet.hairlineWidth },
+  profileRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", minHeight: 48, padding: 14, borderBottomWidth: StyleSheet.hairlineWidth },
   profileLabel: { fontSize: 14, flexShrink: 1 },
   profileVal: { fontSize: 14, fontWeight: "600", flex: 1, flexShrink: 1, marginLeft: 12, textAlign: "right" },
   profileCardTitle: { fontSize: 14, fontWeight: "700", padding: 14, paddingBottom: 8 },

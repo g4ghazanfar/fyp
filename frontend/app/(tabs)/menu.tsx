@@ -41,7 +41,7 @@ export default function MenuScreen() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { paddingTop: isWeb ? 67 : insets.top + 16, backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <Text style={[styles.title, { color: colors.foreground }]}>Menu</Text>
-        <View style={styles.sortRow}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.sortRow} contentContainerStyle={styles.sortContent}>
           {(["health", "price", "rating"] as const).map(s => (
             <Pressable
               key={s}
@@ -53,7 +53,7 @@ export default function MenuScreen() {
               </Text>
             </Pressable>
           ))}
-        </View>
+        </ScrollView>
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={[styles.categories, { borderBottomColor: colors.border }]} contentContainerStyle={styles.categoriesContent}>
@@ -93,11 +93,12 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   header: { paddingHorizontal: 20, paddingBottom: 12, borderBottomWidth: 1 },
   title: { fontSize: 28, fontWeight: "800" },
-  sortRow: { flexDirection: "row", gap: 8, marginTop: 12, flexWrap: "wrap" },
+  sortRow: { marginTop: 12 },
+  sortContent: { flexDirection: "row", gap: 8, paddingRight: 4 },
   sortBtn: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, flexShrink: 0 },
   sortText: { fontSize: 12, fontWeight: "600", flexShrink: 0 },
   categories: { borderBottomWidth: 1, paddingVertical: 12 },
-  categoriesContent: { paddingHorizontal: 16 },
+  categoriesContent: { paddingHorizontal: 16, alignItems: "center" },
   catBtn: { paddingHorizontal: 20, paddingVertical: 8, borderRadius: 20, marginRight: 8, flexShrink: 0 },
   catText: { fontSize: 14, fontWeight: "600", flexShrink: 0 },
   count: { fontSize: 13, marginBottom: 12 },

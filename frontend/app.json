@@ -28,7 +28,14 @@
         }
       ],
       "expo-font",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Allow SmartEats to use the microphone.",
+          "speechRecognitionPermission": "Allow SmartEats to convert your voice to text."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

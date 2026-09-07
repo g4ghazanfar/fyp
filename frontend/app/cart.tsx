@@ -23,6 +23,8 @@ export default function CartScreen() {
   const deliveryFee = 50;
   const subtotal = Number.isFinite(total) ? total : 0;
   const grandTotal = subtotal + deliveryFee;
+  const subtotalLabel = subtotal.toLocaleString();
+  const grandTotalLabel = grandTotal.toLocaleString();
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -80,7 +82,7 @@ export default function CartScreen() {
               <Text style={[styles.summaryTitle, { color: colors.foreground }]}>Order Summary</Text>
               <View style={styles.summaryRow}>
                 <Text style={[styles.summaryLabel, { color: colors.mutedForeground }]}>Subtotal</Text>
-                <Text style={[styles.summaryVal, { color: colors.foreground }]}>Rs {subtotal}</Text>
+                <Text style={[styles.summaryVal, { color: colors.foreground }]}>Rs {subtotalLabel}</Text>
               </View>
               <View style={styles.summaryRow}>
                 <Text style={[styles.summaryLabel, { color: colors.mutedForeground }]}>Delivery Fee</Text>
@@ -88,7 +90,7 @@ export default function CartScreen() {
               </View>
               <View style={[styles.summaryRow, { paddingTop: 12, borderTopWidth: 1, borderTopColor: colors.border }]}>
                 <Text style={[styles.summaryLabel, { color: colors.foreground, fontWeight: "700", fontSize: 16 }]}>Total</Text>
-                <Text style={[styles.summaryVal, { color: colors.primary, fontWeight: "800", fontSize: 18 }]}>Rs {grandTotal}</Text>
+                <Text style={[styles.summaryVal, { color: colors.primary, fontWeight: "800", fontSize: 18 }]}>Rs {grandTotalLabel}</Text>
               </View>
             </View>
           </ScrollView>

@@ -18,7 +18,11 @@ export function MealCard({ meal, compact = false }: MealCardProps) {
   const inCart = items.find(i => i.meal.id === meal.id);
   const healthScore = Number.isFinite(Number(meal.healthScore)) ? Number(meal.healthScore) : 0;
   const description = (meal.description || "").replace(/\s+/g, " ").trim();
-  const cardDescription = description.length > 57 ? `${description.slice(0, 57).trimEnd()}...` : description;
+  const categoryDescription = (meal.tags?.[0] || meal.category || "SmartEats meal").replace(/^\w/, character => character.toUpperCase());
+  const isInstructionText = /(?:^|\b)(?:step\s*\d|instructions?|cook|add|heat|boil|fry|mix|bake)\b/i.test(description);
+  const cardDescription = isInstructionText
+    ? categoryDescription
+    : description.length > 57 ? `${description.slice(0, 57).trimEnd()}...` : description || categoryDescription;
 
   const handleAdd = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -33,7 +37,7 @@ export function MealCard({ meal, compact = false }: MealCardProps) {
       >
         <Image source={typeof meal.image === "string" ? { uri: meal.image } : meal.image} style={styles.compactImage} />
         <View style={styles.compactInfo}>
-          <Text style={[styles.compactName, { color: colors.foreground }]} numberOfLines={1}>{meal.name}</Text>
+          <Text style={[styles.compactName, { color: colors.foreground }]} numberOfLines={2}>{meal.name}</Text>
           <Text style={[styles.compactCal, { color: colors.mutedForeground }]}>{meal.calories} kcal</Text>
           <View style={styles.compactBottom}>
             <Text style={[styles.price, { color: colors.primary }]}>Rs {meal.price}</Text>
@@ -135,8 +139,8 @@ const styles = StyleSheet.create({
   addText: { fontSize: 14, fontWeight: "700" },
   compactCard: { width: 150, borderRadius: 14, overflow: "hidden", marginRight: 12, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 6, elevation: 2 },
   compactImage: { width: "100%", height: 100, resizeMode: "cover" },
-  compactInfo: { padding: 10 },
-  compactName: { fontSize: 13, fontWeight: "700" },
+  compactInfo: { padding: 10, minHeight: 122 },
+  compactName: { fontSize: 13, fontWeight: "700", minHeight: 34 },
   compactCal: { fontSize: 11, marginTop: 2 },
   compactBottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 6 },
   addBtnSmall: { width: 26, height: 26, borderRadius: 13, alignItems: "center", justifyContent: "center" },
