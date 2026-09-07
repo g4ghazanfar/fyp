@@ -1,8 +1,9 @@
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { useNavigation } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
+  KeyboardAvoidingView,
   Platform,
   Pressable,
   ScrollView,
@@ -26,6 +27,12 @@ export default function ChatScreen() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const { user } = useAuth();
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.setOptions({ tabBarStyle: activeChat ? { display: "none" } : undefined });
+    return () => navigation.setOptions({ tabBarStyle: undefined });
+  }, [activeChat, navigation]);
 
   const openChat = (contact: ChatContact) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -88,7 +95,10 @@ export default function ChatScreen() {
 
   if (activeChat) {
     return (
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <KeyboardAvoidingView
+        style={[styles.container, { backgroundColor: colors.background }]}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View style={[styles.chatHeader, { paddingTop: isWeb ? 67 : insets.top + 16, backgroundColor: colors.card, borderBottomColor: colors.border }]}>
           <Pressable onPress={() => setActiveChat(null)} style={styles.backBtn}>
             <Feather name="arrow-left" size={22} color={colors.foreground} />
@@ -105,6 +115,7 @@ export default function ChatScreen() {
         </View>
 
         <ScrollView
+          style={styles.messages}
           contentContainerStyle={{ padding: 16, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
@@ -142,7 +153,7 @@ export default function ChatScreen() {
             <Feather name="send" size={18} color="#fff" />
           </Pressable>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 
@@ -202,6 +213,7 @@ const styles = StyleSheet.create({
   contactTime: { fontSize: 11 },
   unreadBadge: { width: 22, height: 22, borderRadius: 11, alignItems: "center", justifyContent: "center" },
   unreadText: { color: "#fff", fontSize: 11, fontWeight: "700" },
+  messages: { flex: 1 },
   chatHeader: { flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 16, paddingBottom: 14, borderBottomWidth: 1 },
   backBtn: { padding: 4 },
   avatar: { width: 40, height: 40, borderRadius: 20, alignItems: "center", justifyContent: "center" },

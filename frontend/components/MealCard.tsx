@@ -16,6 +16,9 @@ export function MealCard({ meal, compact = false }: MealCardProps) {
   const colors = useColors();
   const { addItem, items } = useCart();
   const inCart = items.find(i => i.meal.id === meal.id);
+  const healthScore = Number.isFinite(Number(meal.healthScore)) ? Number(meal.healthScore) : 0;
+  const description = (meal.description || "").replace(/\s+/g, " ").trim();
+  const cardDescription = description.length > 57 ? `${description.slice(0, 57).trimEnd()}...` : description;
 
   const handleAdd = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -50,7 +53,7 @@ export function MealCard({ meal, compact = false }: MealCardProps) {
     >
       <Image source={typeof meal.image === "string" ? { uri: meal.image } : meal.image} style={styles.image} />
       <View style={styles.badge}>
-        <Text style={styles.badgeText}>Score: {meal.healthScore}</Text>
+        <Text style={styles.badgeText}>Score: {healthScore}</Text>
       </View>
       <View style={styles.info}>
         <View style={styles.row}>
@@ -61,7 +64,7 @@ export function MealCard({ meal, compact = false }: MealCardProps) {
           </View>
         </View>
         <Text style={[styles.nameUrdu, { color: colors.mutedForeground }]}>{meal.nameUrdu}</Text>
-        <Text style={[styles.desc, { color: colors.mutedForeground }]} numberOfLines={2}>{meal.description}</Text>
+        <Text style={[styles.desc, { color: colors.mutedForeground }]} numberOfLines={2}>{cardDescription}</Text>
         {meal.matchReason ? (
           <Text style={[styles.matchReason, { color: colors.primary }]} numberOfLines={2}>{meal.matchReason}</Text>
         ) : null}

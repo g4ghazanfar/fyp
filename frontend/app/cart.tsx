@@ -21,7 +21,8 @@ export default function CartScreen() {
   const { items, removeItem, updateQuantity, total, clearCart } = useCart();
   const isWeb = Platform.OS === "web";
   const deliveryFee = 50;
-  const grandTotal = total + deliveryFee;
+  const subtotal = Number.isFinite(total) ? total : 0;
+  const grandTotal = subtotal + deliveryFee;
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -79,7 +80,7 @@ export default function CartScreen() {
               <Text style={[styles.summaryTitle, { color: colors.foreground }]}>Order Summary</Text>
               <View style={styles.summaryRow}>
                 <Text style={[styles.summaryLabel, { color: colors.mutedForeground }]}>Subtotal</Text>
-                <Text style={[styles.summaryVal, { color: colors.foreground }]}>Rs {total}</Text>
+                <Text style={[styles.summaryVal, { color: colors.foreground }]}>Rs {subtotal}</Text>
               </View>
               <View style={styles.summaryRow}>
                 <Text style={[styles.summaryLabel, { color: colors.mutedForeground }]}>Delivery Fee</Text>
@@ -94,7 +95,7 @@ export default function CartScreen() {
 
           <View style={[styles.footer, { backgroundColor: colors.card, paddingBottom: isWeb ? 34 : insets.bottom + 8, borderTopColor: colors.border }]}>
             <Pressable
-              onPress={() => router.push({ pathname: "/payment", params: { total: grandTotal } })}
+              onPress={() => router.push({ pathname: "/payment", params: { total: String(grandTotal) } })}
               style={[styles.checkoutBtn, { backgroundColor: colors.primary }]}
             >
               <Text style={styles.checkoutText}>Proceed to Payment</Text>
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 20, paddingBottom: 14, borderBottomWidth: 1 },
   backBtn: { padding: 4 },
   title: { flex: 1, fontSize: 20, fontWeight: "700" },
-  clearText: { fontSize: 14, fontWeight: "600" },
+  clearText: { fontSize: 14, fontWeight: "600", flexShrink: 0 },
   empty: { flex: 1, alignItems: "center", justifyContent: "center", gap: 12, padding: 40 },
   emptyTitle: { fontSize: 20, fontWeight: "700" },
   emptySub: { fontSize: 14 },
@@ -133,5 +134,5 @@ const styles = StyleSheet.create({
   summaryVal: { fontSize: 14, fontWeight: "600" },
   footer: { position: "absolute", bottom: 0, left: 0, right: 0, padding: 20, paddingTop: 14, borderTopWidth: 1 },
   checkoutBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: 16 },
-  checkoutText: { color: "#fff", fontSize: 16, fontWeight: "700" },
+  checkoutText: { color: "#fff", fontSize: 16, fontWeight: "700", flexShrink: 1, textAlign: "center" },
 });

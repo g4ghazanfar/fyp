@@ -51,7 +51,7 @@ export default function ProfileScreen() {
           </View>
           <View style={styles.statDiv} />
           <View style={styles.stat}>
-            <Text style={styles.statVal}>{user?.healthProfile?.fitnessGoal?.split(" ")[0] ?? "—"}</Text>
+            <Text style={styles.statVal} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75}>{user?.healthProfile?.fitnessGoal?.split(" ")[0] ?? "—"}</Text>
             <Text style={styles.statLabel}>Goal</Text>
           </View>
         </View>
@@ -159,7 +159,7 @@ export default function ProfileScreen() {
               ].map(item => (
                 <View key={item.label} style={[styles.profileRow, { borderBottomColor: colors.border }]}>
                   <Text style={[styles.profileLabel, { color: colors.mutedForeground }]}>{item.label}</Text>
-                  <Text style={[styles.profileVal, { color: colors.foreground }]}>{item.val ?? "—"}</Text>
+                  <Text style={[styles.profileVal, { color: colors.foreground }]} numberOfLines={2}>{item.val ?? "—"}</Text>
                 </View>
               ))}
             </View>
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   email: { color: "rgba(255,255,255,0.75)", fontSize: 14, marginTop: 4 },
   statsRow: { flexDirection: "row", gap: 0, marginTop: 20, backgroundColor: "rgba(255,255,255,0.15)", borderRadius: 16, padding: 16, width: "100%" },
   stat: { flex: 1, alignItems: "center" },
-  statVal: { color: "#fff", fontSize: 20, fontWeight: "800" },
+  statVal: { color: "#fff", fontSize: 20, fontWeight: "800", flexShrink: 1, textAlign: "center" },
   statLabel: { color: "rgba(255,255,255,0.75)", fontSize: 11, marginTop: 2 },
   statDiv: { width: 1, backgroundColor: "rgba(255,255,255,0.3)" },
   tabs: { flexDirection: "row", borderBottomWidth: 1 },
@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
   achieveText: { fontSize: 13, fontWeight: "600" },
   profileCard: { borderRadius: 16, overflow: "hidden", shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 6, elevation: 1 },
   profileRow: { flexDirection: "row", justifyContent: "space-between", padding: 14, borderBottomWidth: StyleSheet.hairlineWidth },
-  profileLabel: { fontSize: 14 },
-  profileVal: { fontSize: 14, fontWeight: "600" },
+  profileLabel: { fontSize: 14, flexShrink: 1 },
+  profileVal: { fontSize: 14, fontWeight: "600", flex: 1, flexShrink: 1, marginLeft: 12, textAlign: "right" },
   profileCardTitle: { fontSize: 14, fontWeight: "700", padding: 14, paddingBottom: 8 },
   tags: { flexDirection: "row", flexWrap: "wrap", gap: 8, paddingHorizontal: 14, paddingBottom: 14 },
   tag: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },

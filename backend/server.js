@@ -28,7 +28,13 @@ const categoryDefaults = {
 function mealDto(meal, matchReason) {
   const value = meal.toObject ? meal.toObject() : meal;
   const { _id, __v, createdAt, updatedAt, ...rest } = value;
-  return { ...rest, id: _id?.toString() || value.id, matchReason: matchReason || value.matchReason || "" };
+  const healthScore = Number(rest.healthScore);
+  return {
+    ...rest,
+    id: _id?.toString() || value.id,
+    healthScore: Number.isFinite(healthScore) ? healthScore : 0,
+    matchReason: matchReason || value.matchReason || "",
+  };
 }
 
 function parseNutrition(product) {
@@ -55,6 +61,13 @@ function mealCategory(meal, sourceCategory) {
   if (source.includes("drink")) return "drink";
   if (source.includes("dinner") || source.includes("chicken") || source.includes("seafood")) return "dinner";
   return "lunch";
+}
+
+function cardDescription(sourceMeal, sourceCategory) {
+  const label = [sourceMeal.strCategory || sourceCategory, sourceMeal.strArea].filter(Boolean).join(" · ");
+  if (label) return label;
+  const instructions = String(sourceMeal.strInstructions || "").replace(/\s+/g, " ").trim();
+  return instructions.length > 57 ? `${instructions.slice(0, 57).trimEnd()}...` : instructions;
 }
 
 function allergensFor(ingredients) {
@@ -102,7 +115,7 @@ async function syncMeals() {
       }
       const doc = {
         name: sourceMeal.strMeal,
-        description: sourceMeal.strInstructions || `Freshly prepared ${sourceMeal.strMeal}.`,
+        description: cardDescription(sourceMeal, sourceCategory),
         image: sourceMeal.strMealThumb || "",
         category: mealCategory(sourceMeal, sourceCategory),
         ingredients,

@@ -22,8 +22,8 @@ import { useAuth } from "@/context/AuthContext";
 export default function PaymentScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const { total } = useLocalSearchParams<{ total: string }>();
-  const { items, clearCart } = useCart();
+  const { total: totalParam } = useLocalSearchParams<{ total?: string | string[] }>();
+  const { items, total: cartSubtotal, clearCart } = useCart();
   const { placeOrder } = useOrders();
   const { addPoints } = useAuth();
   const isWeb = Platform.OS === "web";
@@ -31,6 +31,10 @@ export default function PaymentScreen() {
   const [phone, setPhone] = useState("");
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
+  const parsedRouteTotal = Number(Array.isArray(totalParam) ? totalParam[0] : totalParam);
+  const fallbackTotal = (Number.isFinite(cartSubtotal) ? cartSubtotal : 0) + 50;
+  const payableTotal = Number.isFinite(parsedRouteTotal) && parsedRouteTotal > 0 ? parsedRouteTotal : fallbackTotal;
+  const formattedTotal = payableTotal.toLocaleString();
 
   const handlePay = async () => {
     if (!phone || phone.length < 10) return;
@@ -38,9 +42,9 @@ export default function PaymentScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     // Simulate payment processing
     await new Promise(r => setTimeout(r, 2000));
-    await placeOrder(items, Number(total), method);
+    await placeOrder(items, payableTotal, method);
     clearCart();
-    addPoints(Math.floor(Number(total) / 10));
+    addPoints(Math.floor(payableTotal / 10));
     setProcessing(false);
     setSuccess(true);
     setTimeout(() => {
@@ -79,7 +83,7 @@ export default function PaymentScreen() {
       <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 120 }}>
         <View style={[styles.amountCard, { backgroundColor: colors.primary }]}>
           <Text style={styles.amountLabel}>Total Amount</Text>
-          <Text style={styles.amount}>Rs {total}</Text>
+          <Text style={styles.amount}>Rs {formattedTotal}</Text>
           <Text style={styles.amountUrdu}>کل رقم</Text>
         </View>
 
@@ -127,7 +131,7 @@ export default function PaymentScreen() {
           {processing ? <ActivityIndicator color="#fff" /> : (
             <>
               <Feather name="lock" size={20} color="#fff" />
-              <Text style={styles.payText}>Pay Rs {total} via {method === "easypaisa" ? "EasyPaisa" : "JazzCash"}</Text>
+              <Text style={styles.payText}>Pay Rs {formattedTotal} via {method === "easypaisa" ? "EasyPaisa" : "JazzCash"}</Text>
             </>
           )}
         </Pressable>

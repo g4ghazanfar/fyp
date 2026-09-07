@@ -56,7 +56,7 @@ export default function MenuScreen() {
         </View>
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={[styles.categories, { borderBottomColor: colors.border }]}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={[styles.categories, { borderBottomColor: colors.border }]} contentContainerStyle={styles.categoriesContent}>
         {CATEGORIES.map(cat => (
           <Pressable
             key={cat}
@@ -93,15 +93,16 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   header: { paddingHorizontal: 20, paddingBottom: 12, borderBottomWidth: 1 },
   title: { fontSize: 28, fontWeight: "800" },
-  sortRow: { flexDirection: "row", gap: 8, marginTop: 12 },
-  sortBtn: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20 },
-  sortText: { fontSize: 12, fontWeight: "600" },
-  categories: { borderBottomWidth: 1, paddingHorizontal: 16, paddingVertical: 12 },
-  catBtn: { paddingHorizontal: 20, paddingVertical: 8, borderRadius: 20, marginRight: 8 },
-  catText: { fontSize: 14, fontWeight: "600" },
+  sortRow: { flexDirection: "row", gap: 8, marginTop: 12, flexWrap: "wrap" },
+  sortBtn: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, flexShrink: 0 },
+  sortText: { fontSize: 12, fontWeight: "600", flexShrink: 0 },
+  categories: { borderBottomWidth: 1, paddingVertical: 12 },
+  categoriesContent: { paddingHorizontal: 16 },
+  catBtn: { paddingHorizontal: 20, paddingVertical: 8, borderRadius: 20, marginRight: 8, flexShrink: 0 },
+  catText: { fontSize: 14, fontWeight: "600", flexShrink: 0 },
   count: { fontSize: 13, marginBottom: 12 },
   cartBtn: { position: "absolute", bottom: 84, left: 20, right: 20, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: 18, shadowColor: "#000", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 12, elevation: 8 },
-  cartBtnText: { color: "#fff", fontSize: 16, fontWeight: "700", flex: 1, textAlign: "center" },
+  cartBtnText: { color: "#fff", fontSize: 16, fontWeight: "700", flex: 1, flexShrink: 1, textAlign: "center" },
   cartBadge: { width: 26, height: 26, borderRadius: 13, alignItems: "center", justifyContent: "center" },
   cartBadgeText: { color: "#fff", fontSize: 12, fontWeight: "800" },
 });
