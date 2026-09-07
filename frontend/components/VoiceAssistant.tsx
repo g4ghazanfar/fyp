@@ -1,14 +1,18 @@
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import * as Speech from "expo-speech";
+import * as FileSystem from "expo-file-system/legacy";
 import {
-  ExpoSpeechRecognitionModule,
-  useSpeechRecognitionEvent,
-} from "expo-speech-recognition";
+  AudioModule,
+  RecordingPresets,
+  setAudioModeAsync,
+  useAudioRecorder,
+} from "expo-audio";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColors } from "@/hooks/useColors";
-import { apiRequest } from "@/data/api";
+import { apiRequest, API_BASE_URL } from "@/data/api";
 import { useAuth } from "@/context/AuthContext";
 
 const URDU_COMMANDS = [
@@ -25,19 +29,54 @@ interface Props {
   onClose: () => void;
 }
 
-type Phase = "idle" | "listening" | "processing" | "responding";
+type Phase = "idle" | "listening" | "transcribing" | "processing" | "responding";
+
+// Har recording session ke liye bilkul naya native recorder banata hai.
+// Android ka recorder dusri dafa reuse karne pe crash karta hai, isliye
+// stop hone ke baad "sessionId" badal ke ye component dobara mount hota hai.
+function RecorderBridge({ onReady }: { onReady: (recorder: ReturnType<typeof useAudioRecorder>) => void }) {
+  const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
+  useEffect(() => {
+    onReady(recorder);
+  }, [recorder]);
+  return null;
+}
 
 export function VoiceAssistant({ visible, onClose }: Props) {
   const colors = useColors();
   const { user } = useAuth();
+  const [sessionId, setSessionId] = useState(0);
+  const [audioReady, setAudioReady] = useState(false);
+  const recorderRef = useRef<ReturnType<typeof useAudioRecorder> | null>(null);
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [response, setResponse] = useState("");
   const [error, setError] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
-  const transcriptRef = useRef("");
   const pulse = useRef(new Animated.Value(1)).current;
   const wave = useRef(new Animated.Value(0)).current;
+
+  // Modal khulte hi SABSE PEHLE permission le kar audio mode set karo —
+  // recorder tab tak bilkul mount hi nahi hoga jab tak ye complete na ho jaye.
+  useEffect(() => {
+    if (!visible) {
+      setAudioReady(false);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const permission = await AudioModule.requestRecordingPermissionsAsync();
+      if (!permission.granted) {
+        if (!cancelled) setError("مائیکروفون کی permission allow کریں۔");
+        return;
+      }
+      await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });
+      if (!cancelled) setAudioReady(true);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [visible]);
 
   const speakResponse = (text: string) => {
     Speech.stop();
@@ -50,9 +89,11 @@ export function VoiceAssistant({ visible, onClose }: Props) {
 
   const submitPrompt = async (text: string) => {
     const prompt = text.trim();
-    if (!prompt) return;
+    if (!prompt) {
+      setPhase("idle");
+      return;
+    }
     setTranscript(prompt);
-    transcriptRef.current = prompt;
     setResponse("");
     setError("");
     setPhase("processing");
@@ -72,32 +113,44 @@ export function VoiceAssistant({ visible, onClose }: Props) {
     }
   };
 
-  useSpeechRecognitionEvent("start", () => {
-    setIsListening(true);
-    setPhase("listening");
+  const transcribeAndSubmit = async (uri: string) => {
+    setPhase("transcribing");
     setError("");
-  });
+    try {
+      const token = await AsyncStorage.getItem("smarteats_token");
+      const uploadResult = await FileSystem.uploadAsync(
+        `${API_BASE_URL}/ai/transcribe`,
+        uri,
+        {
+          httpMethod: "POST",
+          uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+          fieldName: "audio",
+          mimeType: "audio/m4a",
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        },
+      );
 
-  useSpeechRecognitionEvent("result", event => {
-    const nextTranscript = event.results[0]?.transcript?.trim() || "";
-    if (nextTranscript) {
-      transcriptRef.current = nextTranscript;
-      setTranscript(nextTranscript);
+      if (uploadResult.status !== 200) {
+        console.error("TRANSCRIBE UPLOAD FAILED:", uploadResult.status, uploadResult.body);
+        setError("آواز کو text میں تبدیل کرنے میں مسئلہ ہوا۔");
+        setPhase("idle");
+        return;
+      }
+
+      const data = JSON.parse(uploadResult.body);
+      const text = data.text?.trim();
+      if (!text) {
+        setError("آواز واضح نہیں تھی، دوبارہ کوشش کریں۔");
+        setPhase("idle");
+        return;
+      }
+      await submitPrompt(text);
+    } catch (transcribeError) {
+      console.error("TRANSCRIBE ERROR:", transcribeError);
+      setError("آواز کو text میں تبدیل کرنے میں مسئلہ ہوا۔");
+      setPhase("idle");
     }
-  });
-
-  useSpeechRecognitionEvent("end", () => {
-    setIsListening(false);
-    const finalTranscript = transcriptRef.current.trim();
-    if (finalTranscript) submitPrompt(finalTranscript);
-    else setPhase("idle");
-  });
-
-  useSpeechRecognitionEvent("error", event => {
-    setIsListening(false);
-    setPhase("idle");
-    setError(event.message || "مائیکروفون یا speech recognition دستیاب نہیں ہے۔");
-  });
+  };
 
   useEffect(() => {
     if (isListening) {
@@ -119,28 +172,68 @@ export function VoiceAssistant({ visible, onClose }: Props) {
 
   useEffect(() => () => {
     Speech.stop();
-    ExpoSpeechRecognitionModule.abort();
   }, []);
 
   const startListening = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const permission = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
-    if (!permission.granted) {
-      setError("مائیکروفون کی permission allow کریں۔");
+    Speech.stop();
+    if (!audioReady) {
+      setError("مائیکروفون ابھی تیار نہیں، دوبارہ کوشش کریں۔");
       return;
     }
-    Speech.stop();
     setTranscript("");
-    transcriptRef.current = "";
     setResponse("");
     setError("");
     setPhase("listening");
-    ExpoSpeechRecognitionModule.start({ lang: "ur-PK", interimResults: true, continuous: false });
+    setIsListening(true);
+
+    await new Promise(resolve => setTimeout(resolve, 150));
+    const recorder = recorderRef.current;
+    if (!recorder) {
+      setError("Recorder تیار نہیں ہوا، دوبارہ کوشش کریں۔");
+      setIsListening(false);
+      setPhase("idle");
+      return;
+    }
+    try {
+      await recorder.prepareToRecordAsync();
+      recorder.record();
+    } catch (recordError) {
+      console.error("RECORD START ERROR:", recordError);
+      setError("ریکارڈنگ شروع نہیں ہو سکی، دوبارہ کوشش کریں۔");
+      setIsListening(false);
+      setPhase("idle");
+    }
+  };
+
+  const stopListening = async () => {
+    setIsListening(false);
+    const recorder = recorderRef.current;
+    if (!recorder) {
+      setPhase("idle");
+      return;
+    }
+    try {
+      await recorder.stop();
+      const uri = recorder.uri;
+      setSessionId(id => id + 1);
+      if (uri) {
+        await transcribeAndSubmit(uri);
+      } else {
+        setError("Recording save نہیں ہو سکی، دوبارہ کوشش کریں۔");
+        setPhase("idle");
+      }
+    } catch (stopError) {
+      console.error("RECORD STOP ERROR:", stopError);
+      setSessionId(id => id + 1);
+      setError("ریکارڈنگ روکنے میں مسئلہ ہوا، دوبارہ کوشش کریں۔");
+      setPhase("idle");
+    }
   };
 
   const handleMicPress = () => {
     if (isListening) {
-      ExpoSpeechRecognitionModule.stop();
+      stopListening();
     } else {
       startListening();
     }
@@ -148,12 +241,14 @@ export function VoiceAssistant({ visible, onClose }: Props) {
 
   const handleCommandPress = (command: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (isListening) ExpoSpeechRecognitionModule.abort();
     submitPrompt(command);
   };
 
   const handleClose = () => {
-    if (isListening) ExpoSpeechRecognitionModule.abort();
+    if (isListening && recorderRef.current) {
+      recorderRef.current.stop().catch(() => {});
+      setSessionId(id => id + 1);
+    }
     Speech.stop();
     setIsListening(false);
     setPhase("idle");
@@ -162,8 +257,9 @@ export function VoiceAssistant({ visible, onClose }: Props) {
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={handleClose}>
+      {audioReady && <RecorderBridge key={sessionId} onReady={r => { recorderRef.current = r; }} />}
       <View style={styles.overlay}>
-        <View style={[styles.panel, { backgroundColor: colors.card }]}> 
+        <View style={[styles.panel, { backgroundColor: colors.card }]}>
           <View style={styles.handle} />
           <View style={styles.header}>
             <View style={styles.headerText}>
@@ -178,7 +274,11 @@ export function VoiceAssistant({ visible, onClose }: Props) {
           <View style={styles.micArea}>
             <Animated.View style={[styles.micOuter, { borderColor: colors.primary, transform: [{ scale: pulse }] }]}>
               <Animated.View style={[styles.micMiddle, { backgroundColor: colors.accent }]}>
-                <Pressable onPress={handleMicPress} style={[styles.micBtn, { backgroundColor: isListening ? "#EF4444" : colors.primary }]}>
+                <Pressable
+                  onPress={handleMicPress}
+                  disabled={phase === "transcribing" || phase === "processing" || !audioReady}
+                  style={[styles.micBtn, { backgroundColor: isListening ? "#EF4444" : colors.primary, opacity: (phase === "transcribing" || phase === "processing" || !audioReady) ? 0.6 : 1 }]}
+                >
                   <Feather name={isListening ? "square" : "mic"} size={32} color="#fff" />
                 </Pressable>
               </Animated.View>
@@ -191,8 +291,10 @@ export function VoiceAssistant({ visible, onClose }: Props) {
               </View>
             )}
             <Text style={[styles.status, { color: colors.mutedForeground }]}>
-              {phase === "idle" && "مائیک دبائیں"}
-              {phase === "listening" && "سن رہا ہوں... 🎤"}
+              {!audioReady && "تیار ہو رہا ہے..."}
+              {audioReady && phase === "idle" && "مائیک دبائیں"}
+              {phase === "listening" && "سن رہا ہوں... 🎤 (رکنے کے لیے دوبارہ دبائیں)"}
+              {phase === "transcribing" && "آواز کو سمجھ رہا ہوں..."}
               {phase === "processing" && "Gemini سوچ رہا ہے..."}
               {phase === "responding" && "جواب سنا رہا ہوں... 🔊"}
             </Text>

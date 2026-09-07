@@ -14,29 +14,37 @@
       "backgroundColor": "#2E7D32"
     },
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "Allow SmartEats to convert your voice to text.",
+        "NSMicrophoneUsageDescription": "Allow SmartEats to use the microphone."
+      }
     },
-    "android": {},
+    "android": {
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.smarteats"
+    },
     "web": {
       "favicon": "./assets/images/icon.png"
     },
     "plugins": [
-      [
-        "expo-router",
-        {
-          "origin": "https://replit.com/"
-        }
-      ],
-      "expo-font",
-      "expo-web-browser",
-      [
-        "expo-speech-recognition",
-        {
-          "microphonePermission": "Allow SmartEats to use the microphone.",
-          "speechRecognitionPermission": "Allow SmartEats to convert your voice to text."
-        }
-      ]
-    ],
+  [
+    "expo-router",
+    {
+      "origin": "https://replit.com/"
+    }
+  ],
+  "expo-font",
+  "expo-web-browser",
+  [
+    "expo-audio",
+    {
+      "microphonePermission": "Allow SmartEats to use the microphone."
+    }
+  ]
+],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

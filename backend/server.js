@@ -5,6 +5,7 @@ const dns = require("dns");
 dns.setServers((process.env.DNS_SERVERS || "8.8.8.8,1.1.1.1").split(",").map(server => server.trim()).filter(Boolean));
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const { tokenFor, publicUser, requireAuth } = require("./auth");
@@ -15,6 +16,9 @@ const Order = require("./models/Order");
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
+
+// Voice recording ko memory mein rakhta hai (disk pe save nahi karta), Groq ko forward karne ke liye
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } });
 
 const activityFactors = { sedentary: 1.2, light: 1.375, moderate: 1.55, active: 1.725 };
 const categoryDefaults = {
@@ -296,6 +300,37 @@ app.post("/api/ai/chat", async (req, res, next) => {
     const reply = data.candidates?.[0]?.content?.parts?.map(part => part.text || "").join("").trim();
     if (!reply) return res.status(502).json({ error: "AI returned an empty response" });
     return res.json({ reply });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Voice Assistant ke liye — recorded audio ko Groq Whisper se text mein badalta hai
+app.post("/api/ai/transcribe", upload.single("audio"), async (req, res, next) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "Audio file is required" });
+    if (!process.env.GROQ_API_KEY) return res.status(503).json({ error: "Voice service is not configured" });
+
+    const form = new FormData();
+    form.append(
+      "file",
+      new Blob([req.file.buffer], { type: req.file.mimetype || "audio/m4a" }),
+      req.file.originalname || "recording.m4a",
+    );
+    form.append("model", "whisper-large-v3");
+
+    const response = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+      body: form,
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!response.ok) {
+      const errText = await response.text().catch(() => "");
+      throw new Error(`Groq transcription failed (${response.status}): ${errText}`);
+    }
+    const data = await response.json();
+    return res.json({ text: data.text || "" });
   } catch (error) {
     return next(error);
   }
