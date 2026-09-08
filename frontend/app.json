@@ -30,21 +30,28 @@
       "favicon": "./assets/images/icon.png"
     },
     "plugins": [
-  [
-    "expo-router",
-    {
-      "origin": "https://replit.com/"
-    }
-  ],
-  "expo-font",
-  "expo-web-browser",
-  [
-    "expo-audio",
-    {
-      "microphonePermission": "Allow SmartEats to use the microphone."
-    }
-  ]
-],
+      [
+        "expo-router",
+        {
+          "origin": "https://replit.com/"
+        }
+      ],
+      "expo-font",
+      "expo-web-browser",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow SmartEats to use the microphone."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow SmartEats to access your photos for food scanning.",
+          "cameraPermission": "Allow SmartEats to take food photos for scanning."
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

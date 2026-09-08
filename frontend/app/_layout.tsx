@@ -34,6 +34,7 @@ function RootLayoutNav() {
       <Stack.Screen name="meal/[id]" options={{ presentation: "card" }} />
       <Stack.Screen name="cart" options={{ presentation: "modal" }} />
       <Stack.Screen name="payment" options={{ presentation: "modal" }} />
+      <Stack.Screen name="scan-food" options={{ presentation: "modal" }} />
     </Stack>
   );
 }

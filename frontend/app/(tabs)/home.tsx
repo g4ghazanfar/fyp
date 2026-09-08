@@ -87,21 +87,17 @@ export default function HomeScreen() {
             </Pressable>
           </View>
 
-          {/* Search */}
-          <View style={[styles.searchBox, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Feather name="search" size={18} color={colors.mutedForeground} />
-            <TextInput
-              style={[styles.searchInput, { color: colors.foreground }]}
-              placeholder="Search meals... (اردو میں بھی)"
-              placeholderTextColor={colors.mutedForeground}
-              value={search}
-              onChangeText={setSearch}
-            />
-            {search ? (
-              <Pressable onPress={() => setSearch("")}>
-                <Feather name="x" size={18} color={colors.mutedForeground} />
-              </Pressable>
-            ) : null}
+          {/* Search and food scanner */}
+          <View style={styles.searchRow}>
+            <View style={[styles.searchBox, { backgroundColor: colors.card, borderColor: colors.border }]}>
+              <Feather name="search" size={18} color={colors.mutedForeground} />
+              <TextInput style={[styles.searchInput, { color: colors.foreground }]} placeholder="Search meals... (اردو میں بھی)" placeholderTextColor={colors.mutedForeground} value={search} onChangeText={setSearch} />
+              {search ? <Pressable onPress={() => setSearch("")}><Feather name="x" size={18} color={colors.mutedForeground} /></Pressable> : null}
+            </View>
+            <Pressable onPress={() => router.push("/scan-food")} style={[styles.scanButton, { backgroundColor: colors.primary }]}>
+              <Feather name="camera" size={18} color="#fff" />
+              <Text style={styles.scanButtonText}>Scan</Text>
+            </Pressable>
           </View>
 
           {/* Search Results */}
@@ -159,7 +155,10 @@ const styles = StyleSheet.create({
   pointsStrip: { flexDirection: "row", alignItems: "center", gap: 8, padding: 12, borderRadius: 12, marginBottom: 16 },
   pointsText: { flex: 1, fontSize: 13, fontWeight: "600" },
   viewReport: { fontSize: 12, fontWeight: "700" },
-  searchBox: { flexDirection: "row", alignItems: "center", gap: 10, padding: 14, borderRadius: 14, borderWidth: 1, marginBottom: 20 },
+  searchRow: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 20 },
+  searchBox: { flex: 1, flexDirection: "row", alignItems: "center", gap: 10, padding: 14, borderRadius: 14, borderWidth: 1 },
+  scanButton: { minWidth: 76, height: 52, borderRadius: 14, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6 },
+  scanButtonText: { color: "#fff", fontSize: 13, fontWeight: "700" },
   searchInput: { flex: 1, fontSize: 15 },
   tipCard: { flexDirection: "row", gap: 12, padding: 16, borderRadius: 16, marginBottom: 20, alignItems: "center" },
   tipIcon: { fontSize: 32 },
