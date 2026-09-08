@@ -86,11 +86,25 @@ function allergensFor(ingredients) {
 }
 
 async function fetchJson(url, options = {}) {
-  const response = await fetch(url, { ...options, signal: AbortSignal.timeout(15000) });
-  if (!response.ok) throw new Error(`Upstream request failed (${response.status})`);
+  const {
+    timeoutMs = 60000,
+    ...fetchOptions
+  } = options;
+
+  const response = await fetch(url, {
+    ...fetchOptions,
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => "");
+    throw new Error(
+      `Upstream request failed (${response.status}): ${errorText}`
+    );
+  }
+
   return response.json();
 }
-
 async function syncMeals() {
   const categories = Object.keys(categoryDefaults);
   let synced = 0;
@@ -349,12 +363,43 @@ app.post("/api/ai/scan-food", upload.single("image"), async (req, res, next) => 
     const url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(process.env.GEMINI_MODEL) + ":generateContent?key=" + encodeURIComponent(process.env.GEMINI_API_KEY);
     const data = await fetchJson(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }, { inline_data: { mime_type: req.file.mimetype || "image/jpeg", data: req.file.buffer.toString("base64") } }] }] }) });
     const raw = data.candidates?.[0]?.content?.parts?.map(part => part.text || "").join("").trim() || "";
+    console.log("GEMINI RAW RESPONSE:", raw);
     const cleaned = raw.replace(/^\s*```(?:json)?\s*/i, "").replace(/\s*```\s*$/i, "").trim();
     const start = cleaned.indexOf("{");
     const end = cleaned.lastIndexOf("}");
     const parsed = JSON.parse(start >= 0 && end > start ? cleaned.slice(start, end + 1) : cleaned);
-    const confidence = ["high", "medium", "low"].includes(parsed.confidence) ? parsed.confidence : null;
-    const numbers = [parsed.estimatedCalories, parsed.protein, parsed.carbs, parsed.fat].map(Number);
+const confidenceText = String(parsed.confidence ?? "")
+  .trim()
+  .toLowerCase();
+
+const confidenceValue = Number.parseFloat(
+  confidenceText.replace(/[^0-9.-]/g, "")
+);
+
+let confidence =
+  ["high", "medium", "low"].find((value) =>
+    confidenceText.includes(value)
+  ) || null;
+
+if (!confidence && Number.isFinite(confidenceValue)) {
+  const normalized = confidenceValue > 1
+    ? confidenceValue / 100
+    : confidenceValue;
+
+  confidence =
+    normalized >= 0.8
+      ? "high"
+      : normalized >= 0.5
+        ? "medium"
+        : "low";
+}
+
+const numbers = [
+  parsed.estimatedCalories,
+  parsed.protein,
+  parsed.carbs,
+  parsed.fat
+].map(Number);
     if (!parsed.foodName || !confidence || numbers.some(number => !Number.isFinite(number))) throw new Error("Gemini returned an invalid food scan shape");
     return res.json({ foodName: String(parsed.foodName), estimatedCalories: Math.round(numbers[0]), protein: Math.round(numbers[1]), carbs: Math.round(numbers[2]), fat: Math.round(numbers[3]), confidence, notes: String(parsed.notes || "Estimates depend on the visible serving size.") });
   } catch (error) {
