@@ -391,41 +391,6 @@ app.post("/api/ai/scan-food", upload.single("image"), async (req, res, next) => 
       const error = new Error("Gemini returned an invalid food scan shape"); error.code = "INVALID_FOOD_SCAN"; throw error;
     }
     return res.json({ foodName: String(parsed.foodName), estimatedCalories: Math.round(numbers[0]), protein: Math.round(numbers[1]), carbs: Math.round(numbers[2]), fat: Math.round(numbers[3]), confidence, notes: String(parsed.notes || parsed.portionNotes || "Estimates depend on the visible serving size.") });
-    const parsed = JSON.parse(start >= 0 && end > start ? cleaned.slice(start, end + 1) : cleaned);
-const confidenceText = String(parsed.confidence ?? "")
-  .trim()
-  .toLowerCase();
-
-const confidenceValue = Number.parseFloat(
-  confidenceText.replace(/[^0-9.-]/g, "")
-);
-
-let confidence =
-  ["high", "medium", "low"].find((value) =>
-    confidenceText.includes(value)
-  ) || null;
-
-if (!confidence && Number.isFinite(confidenceValue)) {
-  const normalized = confidenceValue > 1
-    ? confidenceValue / 100
-    : confidenceValue;
-
-  confidence =
-    normalized >= 0.8
-      ? "high"
-      : normalized >= 0.5
-        ? "medium"
-        : "low";
-}
-
-const numbers = [
-  parsed.estimatedCalories,
-  parsed.protein,
-  parsed.carbs,
-  parsed.fat
-].map(Number);
-    if (!parsed.foodName || !confidence || numbers.some(number => !Number.isFinite(number))) throw new Error("Gemini returned an invalid food scan shape");
-    return res.json({ foodName: String(parsed.foodName), estimatedCalories: Math.round(numbers[0]), protein: Math.round(numbers[1]), carbs: Math.round(numbers[2]), fat: Math.round(numbers[3]), confidence, notes: String(parsed.notes || "Estimates depend on the visible serving size.") });
   } catch (error) {
     console.error("Food scan failed:", error);
     if (error instanceof SyntaxError || error?.code === "INVALID_FOOD_SCAN") return res.status(502).json({ error: "Gemini returned an invalid food scan response" });
