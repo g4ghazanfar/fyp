@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColors } from "@/hooks/useColors";
 import { useOrders } from "@/context/OrderContext";
 import { OrderStatusCard } from "@/components/OrderStatusCard";
+import { theme } from "@/constants/theme";
 
 export default function TrackScreen() {
   const colors = useColors();
@@ -56,10 +57,10 @@ export default function TrackScreen() {
                 <View style={styles.historyLeft}>
                   <Text style={[styles.historyRestaurant, { color: colors.foreground }]}>{order.restaurant}</Text>
                   <Text style={[styles.historyDate, { color: colors.mutedForeground }]}>
-                    {new Date(order.createdAt).toLocaleDateString("en-PK")} · {order.items.length} items
+                    {new Date(order.createdAt).toLocaleDateString("en-PK")} / {order.items.length} items
                   </Text>
                   <Text style={[styles.historyPayment, { color: colors.mutedForeground }]}>
-                    {order.paymentMethod === "easypaisa" ? "EasyPaisa" : "JazzCash"} · Rs {order.total}
+                    {order.paymentMethod === "easypaisa" ? "EasyPaisa" : "JazzCash"} / Rs {order.total}
                   </Text>
                 </View>
                 <View style={[styles.deliveredBadge, { backgroundColor: colors.accent }]}>
@@ -77,23 +78,23 @@ export default function TrackScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { paddingHorizontal: 20, paddingBottom: 16 },
-  title: { fontSize: 28, fontWeight: "800" },
-  subtitle: { fontSize: 14, marginTop: 4 },
-  activeBanner: { flexDirection: "row", alignItems: "center", gap: 10, padding: 16, borderRadius: 14, marginBottom: 12 },
-  activeBannerText: { color: "#fff", fontSize: 16, fontWeight: "700", flex: 1 },
-  activeBannerSub: { color: "rgba(255,255,255,0.85)", fontSize: 13 },
-  noOrder: { alignItems: "center", padding: 48, borderRadius: 20, gap: 12 },
-  noOrderTitle: { fontSize: 20, fontWeight: "700" },
-  noOrderSub: { fontSize: 14 },
-  orderBtn: { paddingHorizontal: 32, paddingVertical: 14, borderRadius: 14, marginTop: 8 },
-  orderBtnText: { color: "#fff", fontSize: 16, fontWeight: "700" },
-  sectionTitle: { fontSize: 20, fontWeight: "800", marginTop: 24, marginBottom: 12 },
-  historyCard: { flexDirection: "row", alignItems: "center", padding: 16, borderRadius: 14, marginBottom: 10, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 6, elevation: 1 },
+  header: { paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.md },
+  title: { fontSize: theme.type.hero, fontFamily: theme.fonts.heading },
+  subtitle: { fontSize: theme.type.sm, marginTop: 4 },
+  activeBanner: { flexDirection: "row", alignItems: "center", gap: 10, padding: theme.spacing.md, borderRadius: theme.radius.md, marginBottom: theme.spacing.sm },
+  activeBannerText: { color: "#fff", fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold, flex: 1, flexShrink: 1 },
+  activeBannerSub: { color: "rgba(255,255,255,0.85)", fontSize: theme.type.xs, flexShrink: 0 },
+  noOrder: { alignItems: "center", padding: 48, borderRadius: theme.radius.lg, gap: theme.spacing.sm },
+  noOrderTitle: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium },
+  noOrderSub: { fontSize: theme.type.sm },
+  orderBtn: { paddingHorizontal: theme.spacing.xl, paddingVertical: 14, borderRadius: theme.radius.sm, marginTop: theme.spacing.xs },
+  orderBtnText: { color: "#fff", fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold },
+  sectionTitle: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium, marginTop: theme.spacing.lg, marginBottom: theme.spacing.sm },
+  historyCard: { flexDirection: "row", alignItems: "center", padding: theme.spacing.md, borderRadius: theme.radius.md, marginBottom: theme.spacing.sm, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 7, elevation: 1 },
   historyLeft: { flex: 1 },
-  historyRestaurant: { fontSize: 15, fontWeight: "700" },
-  historyDate: { fontSize: 12, marginTop: 3 },
-  historyPayment: { fontSize: 12, marginTop: 2 },
-  deliveredBadge: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 20 },
-  deliveredText: { fontSize: 12, fontWeight: "600" },
+  historyRestaurant: { fontSize: theme.type.sm, fontFamily: theme.fonts.headingMedium, flexShrink: 1 },
+  historyDate: { fontSize: theme.type.xs, marginTop: 4, flexShrink: 1 },
+  historyPayment: { fontSize: theme.type.xs, marginTop: 2, flexShrink: 1 },
+  deliveredBadge: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: theme.spacing.sm, paddingVertical: theme.spacing.xs, borderRadius: theme.radius.pill, flexShrink: 0 },
+  deliveredText: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodySemibold },
 });

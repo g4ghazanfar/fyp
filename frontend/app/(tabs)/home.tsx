@@ -19,6 +19,7 @@ import { getMeals, getRecommendedMeals, Meal } from "@/data/meals";
 import { MealCard } from "@/components/MealCard";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
 import { HEALTH_TIPS } from "@/data/healthTips";
+import { theme } from "@/constants/theme";
 
 export default function HomeScreen() {
   const colors = useColors();
@@ -63,10 +64,10 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={[styles.header, { paddingTop: isWeb ? 67 : insets.top + 16, backgroundColor: colors.primary }]}>
           <View>
-            <Text style={styles.greeting}>Good day,</Text>
-            <Text style={styles.userName}>{user?.name?.split(" ")[0] ?? "Guest"} 👋</Text>
+            <Text style={styles.greeting}>Your healthy table</Text>
+            <Text style={styles.userName}>{user?.name?.split(" ")[0] ?? "Guest"} <Text style={styles.wave}>👋</Text></Text>
             {user?.healthProfile?.fitnessGoal ? (
-              <Text style={styles.goal}>Goal: {user.healthProfile.fitnessGoal}</Text>
+              <Text style={styles.goal}>Eating for {user.healthProfile.fitnessGoal}</Text>
             ) : null}
           </View>
           <Pressable onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); setShowVoice(true); }}
@@ -80,10 +81,10 @@ export default function HomeScreen() {
           <View style={[styles.pointsStrip, { backgroundColor: colors.accent }]}>
             <Feather name="zap" size={16} color={colors.primary} />
             <Text style={[styles.pointsText, { color: colors.primary }]}>
-              {user?.points ?? 0} points · {user?.streak ?? 0} day streak
+              {user?.points ?? 0} points / {user?.streak ?? 0} day streak
             </Text>
             <Pressable onPress={() => router.push("/(tabs)/profile")}>
-              <Text style={[styles.viewReport, { color: colors.primary }]}>View Report →</Text>
+              <Text style={[styles.viewReport, { color: colors.primary }]}>View report</Text>
             </Pressable>
           </View>
 
@@ -116,7 +117,7 @@ export default function HomeScreen() {
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.tipTitle, { color: colors.foreground }]}>{topTip.title}</Text>
                   <Text style={[styles.tipUrdu, { color: colors.mutedForeground }]}>{topTip.titleUrdu}</Text>
-                  <Text style={[styles.tipDesc, { color: colors.mutedForeground }]} numberOfLines={2}>{topTip.description}</Text>
+                  <Text style={[styles.tipDesc, { color: colors.mutedForeground }]}>{topTip.description}</Text>
                 </View>
               </Pressable>
 
@@ -146,27 +147,28 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { paddingHorizontal: 20, paddingBottom: 24 },
-  greeting: { color: "rgba(255,255,255,0.8)", fontSize: 14 },
-  userName: { color: "#fff", fontSize: 26, fontWeight: "800", marginTop: 2 },
-  goal: { color: "rgba(255,255,255,0.75)", fontSize: 13, marginTop: 4 },
-  voiceBtn: { position: "absolute", right: 20, top: 20, width: 48, height: 48, borderRadius: 24, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
-  body: { borderTopLeftRadius: 24, borderTopRightRadius: 24, marginTop: -20, padding: 20, paddingTop: 24 },
-  pointsStrip: { flexDirection: "row", alignItems: "center", gap: 8, padding: 12, borderRadius: 12, marginBottom: 16 },
-  pointsText: { flex: 1, fontSize: 13, fontWeight: "600" },
-  viewReport: { fontSize: 12, fontWeight: "700" },
-  searchRow: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 20 },
-  searchBox: { flex: 1, flexDirection: "row", alignItems: "center", gap: 10, padding: 14, borderRadius: 14, borderWidth: 1 },
-  scanButton: { minWidth: 76, height: 52, borderRadius: 14, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6 },
-  scanButtonText: { color: "#fff", fontSize: 13, fontWeight: "700" },
-  searchInput: { flex: 1, fontSize: 15 },
-  tipCard: { flexDirection: "row", gap: 12, padding: 16, borderRadius: 16, marginBottom: 20, alignItems: "center" },
+  header: { paddingHorizontal: 20, paddingBottom: 32 },
+  greeting: { color: "rgba(42,33,28,0.68)", fontSize: theme.type.sm, fontFamily: theme.fonts.bodyMedium },
+  userName: { color: theme.colors.inkOnPrimary, fontSize: theme.type.hero, fontFamily: theme.fonts.heading, marginTop: 4 },
+  wave: { fontSize: theme.type.display },
+  goal: { color: "rgba(42,33,28,0.7)", fontSize: theme.type.xs, marginTop: 6, fontFamily: theme.fonts.bodyMedium },
+  voiceBtn: { position: "absolute", right: 20, top: 20, width: 48, height: 48, borderRadius: 24, backgroundColor: "rgba(255,255,255,0.38)", alignItems: "center", justifyContent: "center" },
+  body: { borderTopLeftRadius: theme.radius.lg, borderTopRightRadius: theme.radius.lg, marginTop: -22, padding: theme.spacing.lg, paddingTop: theme.spacing.lg },
+  pointsStrip: { flexDirection: "row", alignItems: "center", gap: 8, padding: theme.spacing.sm, borderRadius: theme.radius.sm, marginBottom: theme.spacing.md },
+  pointsText: { flex: 1, fontSize: theme.type.xs, fontFamily: theme.fonts.bodySemibold, flexShrink: 1 },
+  viewReport: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodyBold, flexShrink: 0 },
+  searchRow: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: theme.spacing.lg },
+  searchBox: { flex: 1, flexDirection: "row", alignItems: "center", gap: 10, padding: theme.spacing.md, borderRadius: theme.radius.md, borderWidth: 1, minWidth: 0 },
+  scanButton: { minWidth: 76, height: 52, borderRadius: theme.radius.md, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6 },
+  scanButtonText: { color: "#fff", fontSize: theme.type.sm, fontFamily: theme.fonts.bodyBold },
+  searchInput: { flex: 1, minWidth: 0, fontSize: theme.type.body },
+  tipCard: { flexDirection: "row", gap: theme.spacing.sm, padding: theme.spacing.md, borderRadius: theme.radius.md, marginBottom: theme.spacing.lg, alignItems: "center" },
   tipIcon: { fontSize: 32 },
-  tipTitle: { fontSize: 15, fontWeight: "700" },
-  tipUrdu: { fontSize: 13 },
-  tipDesc: { fontSize: 12, marginTop: 4, lineHeight: 18 },
-  sectionTitle: { fontSize: 20, fontWeight: "800", marginBottom: 4 },
-  sectionSub: { fontSize: 13, marginBottom: 16 },
-  empty: { textAlign: "center", padding: 24, fontSize: 14 },
+  tipTitle: { fontSize: theme.type.body, fontFamily: theme.fonts.headingMedium },
+  tipUrdu: { fontSize: theme.type.sm },
+  tipDesc: { fontSize: theme.type.xs, marginTop: 4, lineHeight: 18 },
+  sectionTitle: { fontSize: theme.type.display, fontFamily: theme.fonts.heading, marginBottom: 4 },
+  sectionSub: { fontSize: theme.type.sm, marginBottom: theme.spacing.md },
+  empty: { textAlign: "center", padding: theme.spacing.lg, fontSize: theme.type.sm },
   horizontal: { marginHorizontal: -20, paddingLeft: 20 },
 });

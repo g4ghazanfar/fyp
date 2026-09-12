@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColors } from "@/hooks/useColors";
 import { apiRequest, API_BASE_URL } from "@/data/api";
 import { useAuth } from "@/context/AuthContext";
+import { theme } from "@/constants/theme";
 
 const URDU_COMMANDS = [
   "صحت مند کھانا بتائیں",
@@ -277,7 +278,7 @@ export function VoiceAssistant({ visible, onClose }: Props) {
                 <Pressable
                   onPress={handleMicPress}
                   disabled={phase === "transcribing" || phase === "processing" || !audioReady}
-                  style={[styles.micBtn, { backgroundColor: isListening ? "#EF4444" : colors.primary, opacity: (phase === "transcribing" || phase === "processing" || !audioReady) ? 0.6 : 1 }]}
+                   style={[styles.micBtn, { backgroundColor: isListening ? colors.destructive : colors.primary, opacity: (phase === "transcribing" || phase === "processing" || !audioReady) ? 0.6 : 1 }]}
                 >
                   <Feather name={isListening ? "square" : "mic"} size={32} color="#fff" />
                 </Pressable>
@@ -329,29 +330,29 @@ export function VoiceAssistant({ visible, onClose }: Props) {
 }
 
 const styles = StyleSheet.create({
-  overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end" },
-  panel: { borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, paddingBottom: 40, minHeight: 500 },
-  handle: { width: 40, height: 4, backgroundColor: "#E5E7EB", borderRadius: 2, alignSelf: "center", marginBottom: 20 },
-  header: { flexDirection: "row", alignItems: "center", marginBottom: 24 },
+  overlay: { flex: 1, backgroundColor: theme.colors.overlay, justifyContent: "flex-end" },
+  panel: { borderTopLeftRadius: theme.radius.lg, borderTopRightRadius: theme.radius.lg, padding: theme.spacing.lg, paddingBottom: 40, minHeight: 500 },
+  handle: { width: 40, height: 4, backgroundColor: theme.colors.border, borderRadius: 2, alignSelf: "center", marginBottom: theme.spacing.lg },
+  header: { flexDirection: "row", alignItems: "center", marginBottom: theme.spacing.lg },
   headerText: { flex: 1 },
-  title: { fontSize: 18, fontWeight: "700" },
-  subtitle: { fontSize: 13, marginTop: 3 },
+  title: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium },
+  subtitle: { fontSize: theme.type.xs, marginTop: 4 },
   closeBtn: { padding: 4 },
-  micArea: { alignItems: "center", marginBottom: 24 },
+  micArea: { alignItems: "center", marginBottom: theme.spacing.lg },
   micOuter: { width: 140, height: 140, borderRadius: 70, borderWidth: 2, alignItems: "center", justifyContent: "center" },
   micMiddle: { width: 110, height: 110, borderRadius: 55, alignItems: "center", justifyContent: "center" },
   micBtn: { width: 80, height: 80, borderRadius: 40, alignItems: "center", justifyContent: "center" },
   waves: { flexDirection: "row", gap: 4, marginTop: 16, alignItems: "center", height: 40 },
   wave: { width: 4, borderRadius: 2 },
-  status: { marginTop: 12, fontSize: 14, fontWeight: "500" },
-  error: { fontSize: 12, textAlign: "center", marginBottom: 12 },
-  transcriptBox: { padding: 14, borderRadius: 12, marginBottom: 12 },
+  status: { marginTop: theme.spacing.sm, fontSize: theme.type.sm, fontFamily: theme.fonts.bodyMedium },
+  error: { fontSize: theme.type.xs, textAlign: "center", marginBottom: theme.spacing.sm },
+  transcriptBox: { padding: theme.spacing.sm, borderRadius: theme.radius.sm, marginBottom: theme.spacing.sm },
   transcriptLabel: { fontSize: 11, marginBottom: 4 },
-  transcript: { fontSize: 15, fontWeight: "600", textAlign: "right" },
-  responseBox: { flexDirection: "row", gap: 10, padding: 14, borderRadius: 12, marginBottom: 16, alignItems: "flex-start" },
-  response: { fontSize: 14, flex: 1, lineHeight: 22, textAlign: "right" },
-  suggestLabel: { fontSize: 12, marginBottom: 8 },
+  transcript: { fontSize: theme.type.sm, fontFamily: theme.fonts.bodySemibold, textAlign: "right" },
+  responseBox: { flexDirection: "row", gap: 10, padding: theme.spacing.sm, borderRadius: theme.radius.sm, marginBottom: theme.spacing.md, alignItems: "flex-start" },
+  response: { fontSize: theme.type.sm, flex: 1, lineHeight: 22, textAlign: "right", flexShrink: 1 },
+  suggestLabel: { fontSize: theme.type.xs, marginBottom: theme.spacing.xs },
   suggestions: { flexDirection: "row" },
-  suggestion: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, marginRight: 8, borderWidth: 1 },
-  suggestionText: { fontSize: 12, flexShrink: 0 },
+  suggestion: { paddingHorizontal: theme.spacing.sm, paddingVertical: theme.spacing.xs, borderRadius: theme.radius.pill, marginRight: theme.spacing.xs, borderWidth: 1 },
+  suggestionText: { fontSize: theme.type.xs, flexShrink: 0 },
 });

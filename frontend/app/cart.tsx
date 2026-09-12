@@ -14,6 +14,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColors } from "@/hooks/useColors";
 import { useCart } from "@/context/CartContext";
+import { theme } from "@/constants/theme";
 
 export default function CartScreen() {
   const colors = useColors();
@@ -112,29 +113,29 @@ export default function CartScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 20, paddingBottom: 14, borderBottomWidth: 1 },
+  header: { flexDirection: "row", alignItems: "center", gap: theme.spacing.sm, paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.md, borderBottomWidth: 1 },
   backBtn: { padding: 4 },
-  title: { flex: 1, fontSize: 20, fontWeight: "700" },
-  clearText: { fontSize: 14, fontWeight: "600", flexShrink: 0 },
-  empty: { flex: 1, alignItems: "center", justifyContent: "center", gap: 12, padding: 40 },
-  emptyTitle: { fontSize: 20, fontWeight: "700" },
-  emptySub: { fontSize: 14 },
-  shopBtn: { paddingHorizontal: 32, paddingVertical: 14, borderRadius: 14, marginTop: 8 },
-  shopBtnText: { color: "#fff", fontSize: 16, fontWeight: "700" },
-  itemCard: { flexDirection: "row", gap: 14, padding: 14, borderRadius: 14, marginBottom: 12, alignItems: "center", shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 6, elevation: 1 },
-  itemImage: { width: 64, height: 64, borderRadius: 12, resizeMode: "cover" },
-  itemName: { fontSize: 14, fontWeight: "700" },
-  itemNameUrdu: { fontSize: 12, marginTop: 2 },
-  itemPrice: { fontSize: 15, fontWeight: "700", marginTop: 4 },
-  qtyControl: { flexDirection: "row", alignItems: "center", gap: 10 },
-  qtyBtn: { width: 32, height: 32, borderRadius: 10, alignItems: "center", justifyContent: "center" },
-  qty: { fontSize: 16, fontWeight: "700", minWidth: 20, textAlign: "center" },
-  summary: { borderRadius: 16, padding: 20, marginTop: 8, gap: 12 },
-  summaryTitle: { fontSize: 16, fontWeight: "700", marginBottom: 4 },
+  title: { flex: 1, fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium, flexShrink: 1 },
+  clearText: { fontSize: theme.type.sm, fontFamily: theme.fonts.bodySemibold, flexShrink: 0 },
+  empty: { flex: 1, alignItems: "center", justifyContent: "center", gap: theme.spacing.sm, padding: theme.spacing.xl },
+  emptyTitle: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium },
+  emptySub: { fontSize: theme.type.sm },
+  shopBtn: { paddingHorizontal: theme.spacing.xl, paddingVertical: 14, borderRadius: theme.radius.sm, marginTop: theme.spacing.xs },
+  shopBtnText: { color: "#fff", fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold },
+  itemCard: { flexDirection: "row", gap: theme.spacing.sm, padding: theme.spacing.sm, borderRadius: theme.radius.md, marginBottom: theme.spacing.sm, alignItems: "center", shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 1 },
+  itemImage: { width: 72, height: 72, borderRadius: theme.radius.sm, resizeMode: "cover" },
+  itemName: { fontSize: theme.type.sm, fontFamily: theme.fonts.headingMedium, flexShrink: 1 },
+  itemNameUrdu: { fontSize: theme.type.xs, marginTop: 4 },
+  itemPrice: { fontSize: theme.type.body, fontFamily: theme.fonts.headingMedium, marginTop: 4 },
+  qtyControl: { flexDirection: "row", alignItems: "center", gap: 10, flexShrink: 0 },
+  qtyBtn: { width: 32, height: 32, borderRadius: theme.radius.sm, alignItems: "center", justifyContent: "center" },
+  qty: { fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold, minWidth: 20, textAlign: "center" },
+  summary: { borderRadius: theme.radius.md, padding: theme.spacing.lg, marginTop: theme.spacing.xs, gap: theme.spacing.sm },
+  summaryTitle: { fontSize: theme.type.body, fontFamily: theme.fonts.headingMedium, marginBottom: 4 },
   summaryRow: { flexDirection: "row", justifyContent: "space-between" },
-  summaryLabel: { fontSize: 14 },
-  summaryVal: { fontSize: 14, fontWeight: "600" },
-  footer: { position: "absolute", bottom: 0, left: 0, right: 0, padding: 20, paddingTop: 14, borderTopWidth: 1 },
-  checkoutBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: 16 },
-  checkoutText: { color: "#fff", fontSize: 16, fontWeight: "700", flexShrink: 1, textAlign: "center" },
+  summaryLabel: { fontSize: theme.type.sm, flexShrink: 1 },
+  summaryVal: { fontSize: theme.type.sm, fontFamily: theme.fonts.bodySemibold },
+  footer: { position: "absolute", bottom: 0, left: 0, right: 0, padding: theme.spacing.lg, paddingTop: theme.spacing.sm, borderTopWidth: 1 },
+  checkoutBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: theme.radius.md },
+  checkoutText: { color: "#fff", fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold, flexShrink: 1, textAlign: "center" },
 });

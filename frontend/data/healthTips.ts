@@ -1,3 +1,5 @@
+import { theme } from "@/constants/theme";
+
 export interface HealthTip {
   id: string;
   title: string;
@@ -28,7 +30,7 @@ export const HEALTH_TIPS: HealthTip[] = [
     descriptionUrdu: "روزانہ 8 گلاس پانی پینے سے میٹابولزم بہتر ہوتا ہے اور زہریلے مادے خارج ہوتے ہیں۔",
     category: "General",
     icon: "💧",
-    color: "#3B82F6",
+    color: theme.colors.info,
   },
   {
     id: "t2",
@@ -38,7 +40,7 @@ export const HEALTH_TIPS: HealthTip[] = [
     descriptionUrdu: "ہر کھانے میں پروٹین شامل کریں تاکہ پیٹ بھرا رہے اور مسلز مضبوط ہوں۔",
     category: "Nutrition",
     icon: "💪",
-    color: "#2E7D32",
+    color: theme.colors.health,
   },
   {
     id: "t3",
@@ -48,7 +50,7 @@ export const HEALTH_TIPS: HealthTip[] = [
     descriptionUrdu: "چینی کم کھانے سے ذیابطیس اور موٹاپے کا خطرہ کم ہوتا ہے۔",
     category: "Diabetes",
     icon: "🚫",
-    color: "#EF4444",
+    color: theme.colors.error,
   },
   {
     id: "t4",
@@ -58,7 +60,7 @@ export const HEALTH_TIPS: HealthTip[] = [
     descriptionUrdu: "رنگ برنگی سبزیاں وٹامنز، معدنیات اور فائبر فراہم کرتی ہیں جو صحت کے لیے ضروری ہیں۔",
     category: "General",
     icon: "🥦",
-    color: "#10B981",
+    color: theme.colors.success,
   },
   {
     id: "t5",
@@ -68,7 +70,7 @@ export const HEALTH_TIPS: HealthTip[] = [
     descriptionUrdu: "کھانے کے بعد 10 منٹ چلنے سے ہاضمہ بہتر ہوتا ہے اور بلڈ شوگر کنٹرول میں رہتی ہے۔",
     category: "Diabetes",
     icon: "🚶",
-    color: "#F59E0B",
+    color: theme.colors.warning,
   },
   {
     id: "t6",
@@ -78,7 +80,7 @@ export const HEALTH_TIPS: HealthTip[] = [
     descriptionUrdu: "7-8 گھنٹے کی نیند صحت مند میٹابولزم اور وزن کے لیے ضروری ہے۔",
     category: "General",
     icon: "😴",
-    color: "#8B5CF6",
+    color: theme.colors.secondary,
   },
 ];
 

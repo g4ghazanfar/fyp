@@ -6,6 +6,7 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useColors } from "@/hooks/useColors";
 import { Meal } from "@/data/meals";
 import { useCart } from "@/context/CartContext";
+import { theme } from "@/constants/theme";
 
 interface MealCardProps {
   meal: Meal;
@@ -37,7 +38,7 @@ export function MealCard({ meal, compact = false }: MealCardProps) {
       >
         <Image source={typeof meal.image === "string" ? { uri: meal.image } : meal.image} style={styles.compactImage} />
         <View style={styles.compactInfo}>
-          <Text style={[styles.compactName, { color: colors.foreground }]} numberOfLines={2}>{meal.name}</Text>
+          <Text style={[styles.compactName, { color: colors.foreground }]}>{meal.name}</Text>
           <Text style={[styles.compactCal, { color: colors.mutedForeground }]}>{meal.calories} kcal</Text>
           <View style={styles.compactBottom}>
             <Text style={[styles.price, { color: colors.primary }]}>Rs {meal.price}</Text>
@@ -61,16 +62,16 @@ export function MealCard({ meal, compact = false }: MealCardProps) {
       </View>
       <View style={styles.info}>
         <View style={styles.row}>
-          <Text style={[styles.name, { color: colors.foreground }]} numberOfLines={1}>{meal.name}</Text>
+           <Text style={[styles.name, { color: colors.foreground }]}>{meal.name}</Text>
           <View style={styles.ratingRow}>
             <Feather name="star" size={12} color="#F59E0B" />
             <Text style={[styles.rating, { color: colors.mutedForeground }]}> {meal.rating}</Text>
           </View>
         </View>
         <Text style={[styles.nameUrdu, { color: colors.mutedForeground }]}>{meal.nameUrdu}</Text>
-        <Text style={[styles.desc, { color: colors.mutedForeground }]} numberOfLines={2}>{cardDescription}</Text>
+         <Text style={[styles.desc, { color: colors.mutedForeground }]}>{cardDescription}</Text>
         {meal.matchReason ? (
-          <Text style={[styles.matchReason, { color: colors.primary }]} numberOfLines={2}>{meal.matchReason}</Text>
+          <Text style={[styles.matchReason, { color: colors.primary }]}>{meal.matchReason}</Text>
         ) : null}
         <View style={styles.tags}>
           {meal.tags.slice(0, 2).map(tag => (
@@ -82,7 +83,7 @@ export function MealCard({ meal, compact = false }: MealCardProps) {
         <View style={styles.bottom}>
           <View>
             <Text style={[styles.price, { color: colors.primary }]}>Rs {meal.price}</Text>
-            <Text style={[styles.cal, { color: colors.mutedForeground }]}>{meal.calories} kcal · {meal.prepTime} min</Text>
+            <Text style={[styles.cal, { color: colors.mutedForeground }]}>{meal.calories} kcal / {meal.prepTime} min</Text>
           </View>
           <Pressable
             onPress={handleAdd}
@@ -101,47 +102,47 @@ export function MealCard({ meal, compact = false }: MealCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 16,
+    borderRadius: theme.radius.lg,
     overflow: "hidden",
     marginBottom: 16,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
     elevation: 3,
   },
-  image: { width: "100%", height: 180, resizeMode: "cover" },
+  image: { width: "100%", height: 192, resizeMode: "cover" },
   badge: {
     position: "absolute",
     top: 12,
     right: 12,
-    backgroundColor: "rgba(46,125,50,0.9)",
+    backgroundColor: theme.colors.health,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 20,
   },
-  badgeText: { color: "#fff", fontSize: 11, fontWeight: "700" },
-  info: { padding: 14 },
-  row: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  name: { fontSize: 16, fontWeight: "700", flex: 1 },
-  nameUrdu: { fontSize: 13, marginTop: 2 },
+  badgeText: { color: "#fff", fontSize: theme.type.xs, fontFamily: theme.fonts.bodyBold },
+  info: { padding: theme.spacing.md },
+  row: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: theme.spacing.sm },
+  name: { fontSize: theme.type.body, fontFamily: theme.fonts.headingMedium, flex: 1, flexShrink: 1, lineHeight: 22 },
+  nameUrdu: { fontSize: theme.type.sm, marginTop: 4 },
   ratingRow: { flexDirection: "row", alignItems: "center" },
-  rating: { fontSize: 12 },
-  desc: { fontSize: 13, marginTop: 6, lineHeight: 18 },
-  matchReason: { fontSize: 12, fontWeight: "600", marginTop: 6, lineHeight: 17 },
-  tags: { flexDirection: "row", gap: 6, marginTop: 8 },
-  tag: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 20 },
-  tagText: { fontSize: 11, fontWeight: "600" },
-  bottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 12 },
-  price: { fontSize: 18, fontWeight: "800" },
-  cal: { fontSize: 12, marginTop: 2 },
-  addBtn: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 25 },
-  addText: { fontSize: 14, fontWeight: "700" },
-  compactCard: { width: 150, borderRadius: 14, overflow: "hidden", marginRight: 12, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 6, elevation: 2 },
+  rating: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodyMedium },
+  desc: { fontSize: theme.type.sm, marginTop: 8, lineHeight: 20 },
+  matchReason: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodySemibold, marginTop: 8, lineHeight: 17 },
+  tags: { flexDirection: "row", gap: theme.spacing.xs, marginTop: theme.spacing.sm, flexWrap: "wrap" },
+  tag: { paddingHorizontal: theme.spacing.sm, paddingVertical: theme.spacing.xxs, borderRadius: theme.radius.pill },
+  tagText: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodySemibold },
+  bottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: theme.spacing.sm, marginTop: theme.spacing.md },
+  price: { fontSize: 18, fontFamily: theme.fonts.headingMedium },
+  cal: { fontSize: theme.type.xs, marginTop: 4 },
+  addBtn: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: theme.spacing.md, paddingVertical: 10, borderRadius: theme.radius.pill },
+  addText: { fontSize: theme.type.sm, fontFamily: theme.fonts.bodyBold },
+  compactCard: { width: 164, borderRadius: theme.radius.md, overflow: "hidden", marginRight: 12, shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.08, shadowRadius: 8, elevation: 2 },
   compactImage: { width: "100%", height: 100, resizeMode: "cover" },
-  compactInfo: { padding: 10, minHeight: 122 },
-  compactName: { fontSize: 13, fontWeight: "700", minHeight: 34 },
-  compactCal: { fontSize: 11, marginTop: 2 },
+  compactInfo: { padding: theme.spacing.sm, minHeight: 126 },
+  compactName: { fontSize: theme.type.sm, fontFamily: theme.fonts.headingMedium, lineHeight: 18 },
+  compactCal: { fontSize: theme.type.xs, marginTop: 4 },
   compactBottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 6 },
   addBtnSmall: { width: 26, height: 26, borderRadius: 13, alignItems: "center", justifyContent: "center" },
 });

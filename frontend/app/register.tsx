@@ -15,6 +15,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth, HealthProfile } from "@/context/AuthContext";
 import { useColors } from "@/hooks/useColors";
+import { theme } from "@/constants/theme";
 
 const STEPS = ["Personal Info", "Health Profile", "Preferences"];
 
@@ -147,7 +148,7 @@ export default function Register() {
         </Pressable>
         <View style={{ flex: 1 }}>
           <Text style={[styles.title, { color: colors.foreground }]}>Create Account</Text>
-          <Text style={[styles.subtitle, { color: colors.mutedForeground }]}>Step {step + 1} of {STEPS.length}: {STEPS[step]}</Text>
+          <Text style={[styles.subtitle, { color: colors.mutedForeground }]}>Part {step + 1} of {STEPS.length} / {STEPS[step]}</Text>
         </View>
       </View>
 
@@ -230,26 +231,26 @@ export default function Register() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingBottom: 16, gap: 12 },
+  header: { flexDirection: "row", alignItems: "center", paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.md, gap: theme.spacing.sm },
   back: { padding: 4 },
-  title: { fontSize: 20, fontWeight: "700" },
-  subtitle: { fontSize: 13, marginTop: 2 },
-  progress: { flexDirection: "row", gap: 4, paddingHorizontal: 20, paddingBottom: 8 },
+  title: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium },
+  subtitle: { fontSize: theme.type.xs, marginTop: 4 },
+  progress: { flexDirection: "row", gap: theme.spacing.xxs, paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.xs },
   progressBar: { height: 3, borderRadius: 2 },
-  content: { padding: 24, paddingBottom: 40 },
-  section: { gap: 12 },
-  sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 8 },
-  fieldBox: { gap: 6 },
-  label: { fontSize: 13, fontWeight: "500" },
-  inputBox: { borderRadius: 12, padding: 14, borderWidth: 1 },
-  input: { fontSize: 15 },
-  chips: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, borderWidth: 1.5 },
-  chipText: { fontSize: 13, fontWeight: "600" },
-  row: { flexDirection: "row", gap: 12 },
-  nextBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: 16, marginTop: 28 },
-  nextText: { color: "#fff", fontSize: 16, fontWeight: "700" },
-  loginLink: { alignItems: "center", marginTop: 16 },
-  loginText: { fontSize: 14 },
-  error: { color: "#EF4444", fontSize: 13, textAlign: "center", marginTop: 12 },
+  content: { padding: theme.spacing.lg, paddingBottom: 40 },
+  section: { gap: theme.spacing.sm },
+  sectionTitle: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium, marginBottom: theme.spacing.xs },
+  fieldBox: { gap: theme.spacing.xs },
+  label: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodyMedium },
+  inputBox: { borderRadius: theme.radius.sm, padding: theme.spacing.sm, borderWidth: 1 },
+  input: { fontSize: theme.type.sm, minWidth: 0 },
+  chips: { flexDirection: "row", flexWrap: "wrap", gap: theme.spacing.xs },
+  chip: { paddingHorizontal: theme.spacing.sm, paddingVertical: theme.spacing.xs, borderRadius: theme.radius.pill, borderWidth: 1.5, flexShrink: 0 },
+  chipText: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodySemibold, flexShrink: 0 },
+  row: { flexDirection: "row", gap: theme.spacing.sm },
+  nextBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: theme.radius.md, marginTop: theme.spacing.lg },
+  nextText: { color: "#fff", fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold },
+  loginLink: { alignItems: "center", marginTop: theme.spacing.md },
+  loginText: { fontSize: theme.type.sm },
+  error: { color: theme.colors.error, fontSize: theme.type.xs, textAlign: "center", marginTop: theme.spacing.sm },
 });

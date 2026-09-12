@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColors } from "@/hooks/useColors";
 import { getMeal, Meal } from "@/data/meals";
 import { useCart } from "@/context/CartContext";
+import { theme } from "@/constants/theme";
 
 export default function MealDetail() {
   const colors = useColors();
@@ -56,7 +57,7 @@ export default function MealDetail() {
               <Feather name="arrow-left" size={22} color="#fff" />
             </Pressable>
             <View style={styles.scoreBadge}>
-              <Text style={styles.scoreText}>Health Score: {meal.healthScore}/100</Text>
+              <Text style={styles.scoreText}>Health score {meal.healthScore}/100</Text>
             </View>
           </View>
         </View>
@@ -102,8 +103,8 @@ export default function MealDetail() {
 
           {meal.allergens.length > 0 && (
             <View style={[styles.allergenBox, { backgroundColor: "#FEF3C7" }]}>
-              <Feather name="alert-triangle" size={16} color="#D97706" />
-              <Text style={{ color: "#D97706", flex: 1, fontSize: 13 }}>
+              <Feather name="alert-triangle" size={16} color={colors.warning} />
+              <Text style={{ color: colors.warning, flex: 1, fontSize: theme.type.sm, flexShrink: 1 }}>
                 Contains: {meal.allergens.join(", ")}
               </Text>
             </View>
@@ -124,7 +125,7 @@ export default function MealDetail() {
             <NutritionRow label="Calories" val={meal.calories} unit="kcal" color={colors.secondary} />
             <NutritionRow label="Protein" val={meal.protein} unit="g" color={colors.primary} />
             <NutritionRow label="Carbohydrates" val={meal.carbs} unit="g" color="#F59E0B" />
-            <NutritionRow label="Fat" val={meal.fat} unit="g" color="#EF4444" />
+            <NutritionRow label="Fat" val={meal.fat} unit="g" color={colors.destructive} />
           </View>
 
           <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Suitable For</Text>
@@ -166,38 +167,38 @@ export default function MealDetail() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   imageContainer: { position: "relative" },
-  image: { width: "100%", height: 280, resizeMode: "cover" },
+  image: { width: "100%", height: 312, resizeMode: "cover" },
   overlay: { position: "absolute", top: 0, left: 0, right: 0, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingHorizontal: 20 },
   backBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: "rgba(0,0,0,0.5)", alignItems: "center", justifyContent: "center" },
-  scoreBadge: { backgroundColor: "rgba(46,125,50,0.9)", paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20 },
-  scoreText: { color: "#fff", fontSize: 13, fontWeight: "700" },
-  body: { padding: 20 },
-  topRow: { flexDirection: "row", alignItems: "flex-start", gap: 12, marginBottom: 10 },
-  name: { fontSize: 24, fontWeight: "800" },
-  nameUrdu: { fontSize: 15, marginTop: 4 },
+  scoreBadge: { backgroundColor: theme.colors.health, paddingHorizontal: theme.spacing.md, paddingVertical: theme.spacing.xs, borderRadius: theme.radius.pill },
+  scoreText: { color: "#fff", fontSize: theme.type.xs, fontFamily: theme.fonts.bodyBold },
+  body: { padding: theme.spacing.lg },
+  topRow: { flexDirection: "row", alignItems: "flex-start", gap: theme.spacing.sm, marginBottom: theme.spacing.sm },
+  name: { fontSize: theme.type.display, fontFamily: theme.fonts.heading, flexShrink: 1 },
+  nameUrdu: { fontSize: theme.type.sm, marginTop: 4 },
   ratingBadge: { flexDirection: "row", alignItems: "center" },
-  rating: { fontSize: 14, fontWeight: "700" },
-  reviews: { fontSize: 12 },
-  desc: { fontSize: 14, lineHeight: 22, marginBottom: 16 },
-  infoRow: { flexDirection: "row", gap: 8, flexWrap: "wrap", marginBottom: 14 },
-  infoChip: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
-  infoText: { fontSize: 12, fontWeight: "600" },
-  tags: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 16 },
-  tag: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
-  tagText: { fontSize: 12, fontWeight: "600" },
-  allergenBox: { flexDirection: "row", alignItems: "center", gap: 10, padding: 14, borderRadius: 12, marginBottom: 16 },
-  sectionTitle: { fontSize: 17, fontWeight: "700", marginBottom: 12 },
-  nutrition: { gap: 8, marginBottom: 20 },
-  nutriRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 14, borderRadius: 12 },
-  nutriLabel: { fontSize: 14 },
+  rating: { fontSize: theme.type.sm, fontFamily: theme.fonts.bodyBold },
+  reviews: { fontSize: theme.type.xs },
+  desc: { fontSize: theme.type.sm, lineHeight: 22, marginBottom: theme.spacing.md },
+  infoRow: { flexDirection: "row", gap: theme.spacing.xs, flexWrap: "wrap", marginBottom: theme.spacing.md },
+  infoChip: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: theme.spacing.sm, paddingVertical: theme.spacing.xs, borderRadius: theme.radius.pill },
+  infoText: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodySemibold, flexShrink: 1 },
+  tags: { flexDirection: "row", flexWrap: "wrap", gap: theme.spacing.xs, marginBottom: theme.spacing.md },
+  tag: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: theme.spacing.sm, paddingVertical: theme.spacing.xs, borderRadius: theme.radius.pill },
+  tagText: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodySemibold, flexShrink: 1 },
+  allergenBox: { flexDirection: "row", alignItems: "center", gap: 10, padding: theme.spacing.md, borderRadius: theme.radius.sm, marginBottom: theme.spacing.md },
+  sectionTitle: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium, marginBottom: theme.spacing.sm },
+  nutrition: { gap: theme.spacing.xs, marginBottom: theme.spacing.lg },
+  nutriRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: theme.spacing.sm, borderRadius: theme.radius.sm },
+  nutriLabel: { fontSize: theme.type.sm },
   nutriRight: { flexDirection: "row", alignItems: "baseline", gap: 4 },
-  nutriVal: { fontSize: 18, fontWeight: "800" },
-  nutriUnit: { fontSize: 12 },
-  footer: { position: "absolute", bottom: 0, left: 0, right: 0, flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 20, paddingTop: 16, borderTopWidth: 1 },
-  priceLabel: { fontSize: 12 },
-  price: { fontSize: 26, fontWeight: "800" },
-  footerBtns: { flexDirection: "row", gap: 10, alignItems: "center" },
-  removeBtn: { width: 48, height: 48, borderRadius: 14, alignItems: "center", justifyContent: "center" },
-  addBtn: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 24, paddingVertical: 14, borderRadius: 14 },
-  addText: { color: "#fff", fontSize: 15, fontWeight: "700" },
+  nutriVal: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium },
+  nutriUnit: { fontSize: theme.type.xs },
+  footer: { position: "absolute", bottom: 0, left: 0, right: 0, flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: theme.spacing.lg, paddingTop: theme.spacing.md, borderTopWidth: 1 },
+  priceLabel: { fontSize: theme.type.xs },
+  price: { fontSize: theme.type.display, fontFamily: theme.fonts.heading },
+  footerBtns: { flexDirection: "row", gap: theme.spacing.xs, alignItems: "center", flexShrink: 1 },
+  removeBtn: { width: 48, height: 48, borderRadius: theme.radius.sm, alignItems: "center", justifyContent: "center" },
+  addBtn: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: theme.spacing.lg, paddingVertical: 14, borderRadius: theme.radius.sm, flexShrink: 1 },
+  addText: { color: "#fff", fontSize: theme.type.sm, fontFamily: theme.fonts.bodyBold, flexShrink: 1 },
 });

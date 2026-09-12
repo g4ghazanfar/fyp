@@ -17,6 +17,7 @@ import { useColors } from "@/hooks/useColors";
 import { CHAT_CONTACTS, ChatContact, ChatMessage } from "@/data/chatData";
 import { apiRequest } from "@/data/api";
 import { useAuth } from "@/context/AuthContext";
+import { theme } from "@/constants/theme";
 
 export default function ChatScreen() {
   const colors = useColors();
@@ -109,7 +110,7 @@ export default function ChatScreen() {
           <View style={{ flex: 1 }}>
             <Text style={[styles.contactName, { color: colors.foreground }]}>{activeChat.name}</Text>
             <Text style={[styles.contactRole, { color: activeChat.online ? colors.success : colors.mutedForeground }]}>
-              {activeChat.role} · {activeChat.online ? "Online" : "Offline"}
+              {activeChat.role} / {activeChat.online ? "Online" : "Offline"}
             </Text>
           </View>
         </View>
@@ -199,18 +200,18 @@ export default function ChatScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { paddingHorizontal: 20, paddingBottom: 16 },
-  title: { fontSize: 28, fontWeight: "800" },
-  subtitle: { fontSize: 14, marginTop: 4 },
-  contactRow: { flexDirection: "row", gap: 14, padding: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: "#E5E7EB", alignItems: "center" },
-  contactAvatar: { width: 52, height: 52, borderRadius: 26, alignItems: "center", justifyContent: "center" },
+  header: { paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.md },
+  title: { fontSize: theme.type.hero, fontFamily: theme.fonts.heading },
+  subtitle: { fontSize: theme.type.sm, marginTop: 4 },
+  contactRow: { flexDirection: "row", gap: theme.spacing.sm, padding: theme.spacing.md, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: theme.colors.border, alignItems: "center" },
+  contactAvatar: { width: 52, height: 52, borderRadius: 26, alignItems: "center", justifyContent: "center", flexShrink: 0 },
   contactAvatarText: { fontSize: 22 },
   onlineDot: { position: "absolute", bottom: 1, right: 1, width: 13, height: 13, borderRadius: 6.5, borderWidth: 2, borderColor: "#fff" },
-  contactTop: { flexDirection: "row", justifyContent: "space-between" },
-  contactName: { fontSize: 15, fontWeight: "700" },
-  contactRole: { fontSize: 12, marginTop: 2, fontWeight: "600" },
-  lastMsg: { fontSize: 13, marginTop: 3, textAlign: "right" },
-  contactTime: { fontSize: 11 },
+  contactTop: { flexDirection: "row", justifyContent: "space-between", gap: theme.spacing.xs },
+  contactName: { fontSize: theme.type.sm, fontFamily: theme.fonts.headingMedium, flexShrink: 1 },
+  contactRole: { fontSize: theme.type.xs, marginTop: 4, fontFamily: theme.fonts.bodySemibold },
+  lastMsg: { fontSize: theme.type.sm, marginTop: 4, textAlign: "right", flexShrink: 1 },
+  contactTime: { fontSize: 11, flexShrink: 0 },
   unreadBadge: { width: 22, height: 22, borderRadius: 11, alignItems: "center", justifyContent: "center" },
   unreadText: { color: "#fff", fontSize: 11, fontWeight: "700" },
   messages: { flex: 1 },
@@ -220,10 +221,10 @@ const styles = StyleSheet.create({
   avatarText: { fontSize: 18 },
   msgRow: { flexDirection: "row", marginBottom: 12 },
   bubble: { padding: 12, borderRadius: 16, gap: 4 },
-  bubbleText: { fontSize: 14, lineHeight: 22 },
+  bubbleText: { fontSize: theme.type.sm, lineHeight: 22, flexShrink: 1 },
   bubbleTime: { fontSize: 10, textAlign: "right" },
   inputRow: { flexDirection: "row", gap: 10, padding: 12, paddingTop: 10, borderTopWidth: 1 },
-  chatInput: { flex: 1, borderRadius: 24, paddingHorizontal: 16, paddingVertical: 10, fontSize: 14, textAlign: "right" },
+  chatInput: { flex: 1, minWidth: 0, borderRadius: theme.radius.pill, paddingHorizontal: theme.spacing.md, paddingVertical: 10, fontSize: theme.type.sm, textAlign: "right" },
   sendBtn: { width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center" },
   success: { color: "#10B981" },
 });

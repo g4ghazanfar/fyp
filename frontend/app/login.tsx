@@ -15,6 +15,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/context/AuthContext";
 import { useColors } from "@/hooks/useColors";
+import { theme } from "@/constants/theme";
 
 export default function Login() {
   const colors = useColors();
@@ -46,8 +47,8 @@ export default function Login() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={[styles.inner, { paddingTop: insets.top + 40, paddingBottom: insets.bottom + 20 }]}>
-        <View style={[styles.logoBox, { backgroundColor: colors.primary }]}>
-          <Feather name="heart" size={36} color="#fff" />
+        <View style={[styles.logoBox, { backgroundColor: colors.primarySoft }]}>
+          <Feather name="heart" size={36} color={colors.health} />
         </View>
         <Text style={[styles.title, { color: colors.foreground }]}>Welcome Back</Text>
         <Text style={[styles.subtitle, { color: colors.mutedForeground }]}>خوش آمدید</Text>
@@ -109,16 +110,16 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  inner: { flex: 1, paddingHorizontal: 28, alignItems: "center", justifyContent: "center" },
-  logoBox: { width: 80, height: 80, borderRadius: 24, alignItems: "center", justifyContent: "center", marginBottom: 24 },
-  title: { fontSize: 28, fontWeight: "800", letterSpacing: -0.5 },
-  subtitle: { fontSize: 16, marginTop: 4, marginBottom: 40 },
-  form: { width: "100%", gap: 14 },
-  inputBox: { flexDirection: "row", alignItems: "center", gap: 12, padding: 16, borderRadius: 14, borderWidth: 1 },
-  input: { flex: 1, fontSize: 16 },
-  error: { color: "#EF4444", fontSize: 13, textAlign: "center" },
-  btn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: 16 },
-  btnText: { color: "#fff", fontSize: 17, fontWeight: "700" },
-  link: { alignItems: "center", marginTop: 8 },
-  linkText: { fontSize: 14 },
+  inner: { flex: 1, paddingHorizontal: theme.spacing.xl, alignItems: "center", justifyContent: "center" },
+  logoBox: { width: 88, height: 88, borderRadius: theme.radius.lg, alignItems: "center", justifyContent: "center", marginBottom: theme.spacing.lg, borderWidth: 1, borderColor: theme.colors.border },
+  title: { fontSize: theme.type.hero, fontFamily: theme.fonts.heading, letterSpacing: -0.5 },
+  subtitle: { fontSize: theme.type.body, marginTop: 4, marginBottom: theme.spacing.xl },
+  form: { width: "100%", gap: theme.spacing.sm },
+  inputBox: { flexDirection: "row", alignItems: "center", gap: 12, padding: theme.spacing.md, borderRadius: theme.radius.md, borderWidth: 1, minWidth: 0 },
+  input: { flex: 1, minWidth: 0, fontSize: theme.type.body },
+  error: { color: theme.colors.error, fontSize: theme.type.xs, textAlign: "center" },
+  btn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: theme.radius.md },
+  btnText: { color: "#fff", fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold },
+  link: { alignItems: "center", marginTop: theme.spacing.xs },
+  linkText: { fontSize: theme.type.sm },
 });

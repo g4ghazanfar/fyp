@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/context/AuthContext";
 import { useColors } from "@/hooks/useColors";
 import { HEALTH_TIPS, WEEKLY_REPORT } from "@/data/healthTips";
+import { theme } from "@/constants/theme";
 
 export default function ProfileScreen() {
   const colors = useColors();
@@ -51,7 +52,7 @@ export default function ProfileScreen() {
           </View>
           <View style={styles.statDiv} />
           <View style={styles.stat}>
-            <Text style={styles.statVal} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75}>{user?.healthProfile?.fitnessGoal?.split(" ")[0] ?? "—"}</Text>
+            <Text style={styles.statVal}>{user?.healthProfile?.fitnessGoal?.split(" ")[0] ?? "—"}</Text>
             <Text style={styles.statLabel}>Goal</Text>
           </View>
         </View>
@@ -159,7 +160,7 @@ export default function ProfileScreen() {
               ].map(item => (
                 <View key={item.label} style={[styles.profileRow, { borderBottomColor: colors.border }]}>
                   <Text style={[styles.profileLabel, { color: colors.mutedForeground }]}>{item.label}</Text>
-                  <Text style={[styles.profileVal, { color: colors.foreground }]} numberOfLines={2}>{item.val ?? "—"}</Text>
+                  <Text style={[styles.profileVal, { color: colors.foreground }]}>{item.val ?? "—"}</Text>
                 </View>
               ))}
             </View>
@@ -168,16 +169,16 @@ export default function ProfileScreen() {
               <Text style={[styles.profileCardTitle, { color: colors.foreground }]}>Allergies</Text>
               <View style={styles.tags}>
                 {(user?.healthProfile?.allergies ?? []).map(a => (
-                  <View key={a} style={[styles.tag, { backgroundColor: "#FEF3C7" }]}>
-                    <Text style={[styles.tagText, { color: "#D97706" }]}>{a}</Text>
+                  <View key={a} style={[styles.tag, { backgroundColor: colors.warningSoft }]}>
+                    <Text style={[styles.tagText, { color: colors.warning }]}>{a}</Text>
                   </View>
                 ))}
               </View>
               <Text style={[styles.profileCardTitle, { color: colors.foreground, marginTop: 14 }]}>Conditions</Text>
               <View style={styles.tags}>
                 {(user?.healthProfile?.conditions ?? []).map(c => (
-                  <View key={c} style={[styles.tag, { backgroundColor: "#FEE2E2" }]}>
-                    <Text style={[styles.tagText, { color: "#EF4444" }]}>{c}</Text>
+                  <View key={c} style={[styles.tag, { backgroundColor: colors.errorSoft }]}>
+                    <Text style={[styles.tagText, { color: colors.destructive }]}>{c}</Text>
                   </View>
                 ))}
               </View>
@@ -196,53 +197,53 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { alignItems: "center", paddingHorizontal: 20, paddingBottom: 24 },
-  avatar: { width: 80, height: 80, borderRadius: 40, alignItems: "center", justifyContent: "center", marginBottom: 12 },
-  name: { color: "#fff", fontSize: 22, fontWeight: "800" },
-  email: { color: "rgba(255,255,255,0.75)", fontSize: 14, marginTop: 4 },
-  statsRow: { flexDirection: "row", gap: 0, marginTop: 20, backgroundColor: "rgba(255,255,255,0.15)", borderRadius: 16, padding: 16, width: "100%" },
+  header: { alignItems: "center", paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.lg },
+  avatar: { width: 80, height: 80, borderRadius: 40, alignItems: "center", justifyContent: "center", marginBottom: theme.spacing.sm },
+  name: { color: "#fff", fontSize: theme.type.display, fontFamily: theme.fonts.heading },
+  email: { color: "rgba(255,255,255,0.75)", fontSize: theme.type.sm, marginTop: 4 },
+  statsRow: { flexDirection: "row", gap: 0, marginTop: theme.spacing.lg, backgroundColor: "rgba(255,255,255,0.18)", borderRadius: theme.radius.md, padding: theme.spacing.md, width: "100%" },
   stat: { flex: 1, alignItems: "center" },
-  statVal: { color: "#fff", fontSize: 20, fontWeight: "800", flexShrink: 1, textAlign: "center" },
-  statLabel: { color: "rgba(255,255,255,0.75)", fontSize: 11, marginTop: 2 },
+  statVal: { color: "#fff", fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium, flexShrink: 1, textAlign: "center" },
+  statLabel: { color: "rgba(255,255,255,0.75)", fontSize: theme.type.xs, marginTop: 4, textAlign: "center" },
   statDiv: { width: 1, backgroundColor: "rgba(255,255,255,0.3)" },
   tabs: { flexDirection: "row", borderBottomWidth: 1 },
-  tab: { flex: 1, alignItems: "center", paddingVertical: 14, borderBottomWidth: 2 },
-  tabText: { fontSize: 13, fontWeight: "600" },
-  sectionTitle: { fontSize: 20, fontWeight: "800", marginBottom: 4 },
-  sectionSub: { fontSize: 13, marginBottom: 16 },
-  tipCard: { flexDirection: "row", gap: 14, padding: 16, borderRadius: 16, marginBottom: 12, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 6, elevation: 1 },
-  tipIcon: { width: 52, height: 52, borderRadius: 14, alignItems: "center", justifyContent: "center" },
-  tipHeader: { flexDirection: "row", alignItems: "center", gap: 8 },
-  tipTitle: { fontSize: 15, fontWeight: "700", flex: 1 },
-  catBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
-  catBadgeText: { fontSize: 10, fontWeight: "600" },
-  tipUrdu: { fontSize: 13, marginTop: 2, fontWeight: "600" },
-  tipDesc: { fontSize: 12, marginTop: 6, lineHeight: 18 },
-  tipDescUrdu: { fontSize: 12, marginTop: 4, lineHeight: 18, textAlign: "right" },
+  tab: { flex: 1, minWidth: 0, alignItems: "center", paddingVertical: 14, paddingHorizontal: theme.spacing.xs, borderBottomWidth: 2 },
+  tabText: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodySemibold, textAlign: "center", flexShrink: 1 },
+  sectionTitle: { fontSize: theme.type.display, fontFamily: theme.fonts.heading, marginBottom: 4 },
+  sectionSub: { fontSize: theme.type.sm, marginBottom: theme.spacing.md, flexShrink: 1 },
+  tipCard: { flexDirection: "row", gap: theme.spacing.sm, padding: theme.spacing.md, borderRadius: theme.radius.md, marginBottom: theme.spacing.sm, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 7, elevation: 1 },
+  tipIcon: { width: 52, height: 52, borderRadius: theme.radius.sm, alignItems: "center", justifyContent: "center" },
+  tipHeader: { flexDirection: "row", alignItems: "flex-start", gap: theme.spacing.xs },
+  tipTitle: { fontSize: theme.type.sm, fontFamily: theme.fonts.headingMedium, flex: 1, flexShrink: 1 },
+  catBadge: { paddingHorizontal: theme.spacing.xs, paddingVertical: theme.spacing.xxs, borderRadius: theme.radius.pill, flexShrink: 0 },
+  catBadgeText: { fontSize: 10, fontFamily: theme.fonts.bodySemibold },
+  tipUrdu: { fontSize: theme.type.sm, marginTop: 4, fontFamily: theme.fonts.bodySemibold },
+  tipDesc: { fontSize: theme.type.xs, marginTop: 6, lineHeight: 18 },
+  tipDescUrdu: { fontSize: theme.type.xs, marginTop: 4, lineHeight: 18, textAlign: "right" },
   reportGrid: { flexDirection: "row", gap: 12, marginBottom: 16 },
-  reportCard: { flex: 1, padding: 20, borderRadius: 16, alignItems: "center" },
-  reportVal: { color: "#fff", fontSize: 28, fontWeight: "800" },
-  reportLabel: { color: "rgba(255,255,255,0.85)", fontSize: 12, marginTop: 4 },
-  chartCard: { borderRadius: 16, padding: 16, marginBottom: 16, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 6, elevation: 1 },
-  chartTitle: { fontSize: 16, fontWeight: "700", marginBottom: 16 },
+  reportCard: { flex: 1, padding: theme.spacing.lg, borderRadius: theme.radius.md, alignItems: "center" },
+  reportVal: { color: "#fff", fontSize: 28, fontFamily: theme.fonts.heading },
+  reportLabel: { color: "rgba(255,255,255,0.85)", fontSize: theme.type.xs, marginTop: 4, textAlign: "center" },
+  chartCard: { borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 7, elevation: 1 },
+  chartTitle: { fontSize: theme.type.body, fontFamily: theme.fonts.headingMedium, marginBottom: theme.spacing.md },
   chart: { flexDirection: "row", alignItems: "flex-end", gap: 8, height: 120 },
   barGroup: { flex: 1, alignItems: "center", gap: 4 },
   barBg: { width: "100%", flex: 1, borderRadius: 6, overflow: "hidden", justifyContent: "flex-end" },
   bar: { width: "100%", borderRadius: 6 },
   barLabel: { fontSize: 10 },
   barVal: { fontSize: 9 },
-  achieveTitle: { fontSize: 16, fontWeight: "700", marginBottom: 10 },
+  achieveTitle: { fontSize: theme.type.body, fontFamily: theme.fonts.headingMedium, marginBottom: theme.spacing.sm },
   achievements: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   achieveBadge: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20 },
-  achieveText: { fontSize: 13, fontWeight: "600" },
-  profileCard: { borderRadius: 16, overflow: "hidden", shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 6, elevation: 1 },
+  achieveText: { fontSize: theme.type.sm, fontFamily: theme.fonts.bodySemibold, flexShrink: 1 },
+  profileCard: { borderRadius: theme.radius.md, overflow: "hidden", shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 7, elevation: 1 },
   profileRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", minHeight: 48, padding: 14, borderBottomWidth: StyleSheet.hairlineWidth },
-  profileLabel: { fontSize: 14, flexShrink: 1 },
-  profileVal: { fontSize: 14, fontWeight: "600", flex: 1, flexShrink: 1, marginLeft: 12, textAlign: "right" },
-  profileCardTitle: { fontSize: 14, fontWeight: "700", padding: 14, paddingBottom: 8 },
-  tags: { flexDirection: "row", flexWrap: "wrap", gap: 8, paddingHorizontal: 14, paddingBottom: 14 },
-  tag: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
-  tagText: { fontSize: 13, fontWeight: "600" },
-  logoutBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: 16, borderWidth: 1.5, marginTop: 20 },
-  logoutText: { fontSize: 16, fontWeight: "700" },
+  profileLabel: { fontSize: theme.type.sm, flexShrink: 1 },
+  profileVal: { fontSize: theme.type.sm, fontFamily: theme.fonts.bodySemibold, flex: 1, flexShrink: 1, marginLeft: theme.spacing.sm, textAlign: "right" },
+  profileCardTitle: { fontSize: theme.type.sm, fontFamily: theme.fonts.headingMedium, padding: theme.spacing.sm, paddingBottom: theme.spacing.xs },
+  tags: { flexDirection: "row", flexWrap: "wrap", gap: theme.spacing.xs, paddingHorizontal: theme.spacing.sm, paddingBottom: theme.spacing.sm },
+  tag: { paddingHorizontal: theme.spacing.sm, paddingVertical: theme.spacing.xs, borderRadius: theme.radius.pill },
+  tagText: { fontSize: theme.type.sm, fontFamily: theme.fonts.bodySemibold, flexShrink: 1 },
+  logoutBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: theme.radius.md, borderWidth: 1.5, marginTop: theme.spacing.lg },
+  logoutText: { fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold },
 });

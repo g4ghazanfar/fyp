@@ -1,42 +1,41 @@
+import { theme } from "@/constants/theme";
+
 const colors = {
   light: {
-    text: "#1a1a1a",
-    tint: "#2E7D32",
-
-    background: "#F8F9FA",
-    foreground: "#1a1a1a",
-
-    card: "#FFFFFF",
-    cardForeground: "#1a1a1a",
-
-    primary: "#2E7D32",
-    primaryForeground: "#FFFFFF",
-
-    secondary: "#FF6B35",
-    secondaryForeground: "#FFFFFF",
-
-    muted: "#F0F4F0",
-    mutedForeground: "#6B7280",
-
-    accent: "#E8F5E9",
-    accentForeground: "#2E7D32",
-
-    destructive: "#EF4444",
-    destructiveForeground: "#FFFFFF",
-
-    border: "#E5E7EB",
-    input: "#F3F4F6",
-
-    success: "#10B981",
-    warning: "#F59E0B",
-    info: "#3B82F6",
-
-    gradient1: "#2E7D32",
-    gradient2: "#43A047",
-    gradient3: "#66BB6A",
+    text: theme.colors.text,
+    tint: theme.colors.primary,
+    background: theme.colors.background,
+    foreground: theme.colors.text,
+    card: theme.colors.surface,
+    cardForeground: theme.colors.text,
+    primary: theme.colors.primary,
+    primaryForeground: theme.colors.inkOnPrimary,
+    secondary: theme.colors.secondary,
+    secondaryForeground: theme.colors.white,
+    muted: theme.colors.surfaceMuted,
+    mutedForeground: theme.colors.textMuted,
+    accent: theme.colors.healthSoft,
+    accentForeground: theme.colors.health,
+    destructive: theme.colors.error,
+    destructiveForeground: theme.colors.white,
+    border: theme.colors.border,
+    input: theme.colors.input,
+    success: theme.colors.success,
+    warning: theme.colors.warning,
+    info: theme.colors.info,
+    health: theme.colors.health,
+    healthSoft: theme.colors.healthSoft,
+    primarySoft: theme.colors.primarySoft,
+    secondarySoft: theme.colors.secondarySoft,
+    warningSoft: theme.colors.warningSoft,
+    errorSoft: theme.colors.errorSoft,
+    white: theme.colors.white,
+    overlay: theme.colors.overlay,
+    gradient1: theme.colors.primary,
+    gradient2: "#F0B75B",
+    gradient3: "#F6D49B",
   },
-
-  radius: 12,
+  radius: theme.radius.md,
 };
 
 export default colors;

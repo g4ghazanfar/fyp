@@ -7,6 +7,7 @@ import React from "react";
 import { Platform, StyleSheet, View, useColorScheme, Text } from "react-native";
 import { useColors } from "@/hooks/useColors";
 import { useCart } from "@/context/CartContext";
+import { theme } from "@/constants/theme";
 
 function NativeTabLayout() {
   return (
@@ -49,9 +50,9 @@ function ClassicTabLayout() {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.mutedForeground,
         headerShown: false,
-        tabBarStyle: {
+         tabBarStyle: {
           position: "absolute",
-          backgroundColor: isIOS ? "transparent" : colors.background,
+           backgroundColor: isIOS ? "transparent" : colors.card,
           borderTopWidth: 1,
           borderTopColor: colors.border,
           elevation: 0,
@@ -61,7 +62,7 @@ function ClassicTabLayout() {
           isIOS ? (
             <BlurView intensity={100} tint={isDark ? "dark" : "light"} style={StyleSheet.absoluteFill} />
           ) : null,
-        tabBarLabelStyle: { fontSize: 10, fontWeight: "600" },
+         tabBarLabelStyle: { fontSize: theme.type.xs, fontFamily: theme.fonts.bodySemibold },
       }}
     >
       <Tabs.Screen
@@ -77,7 +78,7 @@ function ClassicTabLayout() {
           title: "Menu",
           tabBarIcon: ({ color }) => <Feather name="grid" size={22} color={color} />,
           tabBarBadge: itemCount > 0 ? itemCount : undefined,
-          tabBarBadgeStyle: { backgroundColor: colors.secondary, fontSize: 10 },
+           tabBarBadgeStyle: { backgroundColor: colors.secondary, fontSize: theme.type.xs, fontFamily: theme.fonts.bodyBold },
         }}
       />
       <Tabs.Screen

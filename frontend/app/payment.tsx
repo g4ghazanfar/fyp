@@ -18,6 +18,7 @@ import { useColors } from "@/hooks/useColors";
 import { useCart } from "@/context/CartContext";
 import { useOrders } from "@/context/OrderContext";
 import { useAuth } from "@/context/AuthContext";
+import { theme } from "@/constants/theme";
 
 export default function PaymentScreen() {
   const colors = useColors();
@@ -90,8 +91,8 @@ export default function PaymentScreen() {
         <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Choose Payment Method</Text>
         <Text style={[styles.sectionSub, { color: colors.mutedForeground }]}>ادائیگی کا طریقہ چنیں</Text>
 
-        <PaymentMethodBtn type="easypaisa" logo="💚" name="EasyPaisa" color="#4CAF50" />
-        <PaymentMethodBtn type="jazzcash" logo="🟠" name="JazzCash" color="#FF6B35" />
+        <PaymentMethodBtn type="easypaisa" logo="💚" name="EasyPaisa" color={colors.health} />
+        <PaymentMethodBtn type="jazzcash" logo="🟠" name="JazzCash" color={colors.secondary} />
 
         <Text style={[styles.sectionTitle, { color: colors.foreground, marginTop: 24 }]}>Mobile Number</Text>
         <Text style={[styles.sectionSub, { color: colors.mutedForeground }]}>موبائل نمبر</Text>
@@ -123,7 +124,7 @@ export default function PaymentScreen() {
         <Pressable
           onPress={handlePay}
           style={[styles.payBtn, {
-            backgroundColor: method === "easypaisa" ? "#4CAF50" : "#FF6B35",
+             backgroundColor: method === "easypaisa" ? colors.health : colors.secondary,
             opacity: processing || !phone ? 0.7 : 1,
           }]}
           disabled={processing || !phone}
@@ -156,32 +157,32 @@ export default function PaymentScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 20, paddingBottom: 14, borderBottomWidth: 1 },
+  header: { flexDirection: "row", alignItems: "center", gap: theme.spacing.sm, paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.md, borderBottomWidth: 1 },
   backBtn: { padding: 4 },
-  title: { fontSize: 20, fontWeight: "700" },
-  titleUrdu: { fontSize: 14 },
-  amountCard: { borderRadius: 20, padding: 28, alignItems: "center", marginBottom: 28 },
-  amountLabel: { color: "rgba(255,255,255,0.8)", fontSize: 14 },
-  amount: { color: "#fff", fontSize: 40, fontWeight: "900", marginTop: 8 },
-  amountUrdu: { color: "rgba(255,255,255,0.7)", fontSize: 14, marginTop: 6 },
-  sectionTitle: { fontSize: 17, fontWeight: "700", marginBottom: 4 },
-  sectionSub: { fontSize: 13, marginBottom: 14 },
-  methodBtn: { flexDirection: "row", alignItems: "center", gap: 14, padding: 18, borderRadius: 16, marginBottom: 12 },
-  methodName: { fontSize: 16, fontWeight: "700" },
-  methodSub: { fontSize: 12, marginTop: 2 },
-  phoneBox: { flexDirection: "row", alignItems: "center", borderRadius: 14, borderWidth: 1, overflow: "hidden", marginBottom: 16 },
+  title: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium, flexShrink: 1 },
+  titleUrdu: { fontSize: theme.type.sm },
+  amountCard: { borderRadius: theme.radius.lg, padding: 28, alignItems: "center", marginBottom: theme.spacing.lg },
+  amountLabel: { color: "rgba(42,33,28,0.68)", fontSize: theme.type.sm },
+  amount: { color: theme.colors.inkOnPrimary, fontSize: 40, fontFamily: theme.fonts.heading, marginTop: theme.spacing.xs },
+  amountUrdu: { color: "rgba(42,33,28,0.62)", fontSize: theme.type.sm, marginTop: 6 },
+  sectionTitle: { fontSize: theme.type.heading, fontFamily: theme.fonts.headingMedium, marginBottom: 4 },
+  sectionSub: { fontSize: theme.type.xs, marginBottom: theme.spacing.sm },
+  methodBtn: { flexDirection: "row", alignItems: "center", gap: theme.spacing.sm, padding: theme.spacing.md, borderRadius: theme.radius.md, marginBottom: theme.spacing.sm },
+  methodName: { fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold },
+  methodSub: { fontSize: theme.type.xs, marginTop: 2 },
+  phoneBox: { flexDirection: "row", alignItems: "center", borderRadius: theme.radius.sm, borderWidth: 1, overflow: "hidden", marginBottom: theme.spacing.md },
   countryCode: { padding: 16, paddingRight: 14 },
   countryText: { fontSize: 15, fontWeight: "600" },
   phoneInput: { flex: 1, padding: 16, fontSize: 16 },
-  secureBox: { flexDirection: "row", gap: 10, padding: 14, borderRadius: 12, alignItems: "flex-start" },
-  secureText: { fontSize: 13, flex: 1, lineHeight: 20 },
-  footer: { position: "absolute", bottom: 0, left: 0, right: 0, padding: 20, paddingTop: 14, borderTopWidth: 1 },
-  payBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: 16 },
-  payText: { color: "#fff", fontSize: 15, fontWeight: "700" },
+  secureBox: { flexDirection: "row", gap: 10, padding: theme.spacing.sm, borderRadius: theme.radius.sm, alignItems: "flex-start" },
+  secureText: { fontSize: theme.type.sm, flex: 1, lineHeight: 20 },
+  footer: { position: "absolute", bottom: 0, left: 0, right: 0, padding: theme.spacing.lg, paddingTop: theme.spacing.sm, borderTopWidth: 1 },
+  payBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: theme.radius.md },
+  payText: { color: "#fff", fontSize: theme.type.sm, fontFamily: theme.fonts.bodyBold, flexShrink: 1, textAlign: "center" },
   successOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", alignItems: "center", justifyContent: "center" },
   successCard: { margin: 40, borderRadius: 24, padding: 40, alignItems: "center" },
   successIcon: { width: 100, height: 100, borderRadius: 50, alignItems: "center", justifyContent: "center", marginBottom: 20 },
-  successTitle: { fontSize: 24, fontWeight: "800" },
-  successUrdu: { fontSize: 16, marginTop: 6 },
-  successSub: { fontSize: 14, marginTop: 8, textAlign: "center", lineHeight: 20 },
+  successTitle: { fontSize: theme.type.display, fontFamily: theme.fonts.heading },
+  successUrdu: { fontSize: theme.type.body, marginTop: 6 },
+  successSub: { fontSize: theme.type.sm, marginTop: theme.spacing.xs, textAlign: "center", lineHeight: 20 },
 });

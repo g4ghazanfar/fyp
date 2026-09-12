@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColors } from "@/hooks/useColors";
+import { theme } from "@/constants/theme";
 
 const { width } = Dimensions.get("window");
 
@@ -24,7 +25,7 @@ const SLIDES = [
     desc: "Personalized meal recommendations based on your health profile. Eat right, live better.",
     descUrdu: "آپ کی صحت کے مطابق کھانے کی تجاویز۔ صحیح کھائیں، بہتر جئیں۔",
     icon: "heart",
-    color: "#2E7D32",
+    color: theme.colors.health,
   },
   {
     title: "Health First",
@@ -34,7 +35,7 @@ const SLIDES = [
     desc: "Our AI analyzes your allergies, conditions and preferences to suggest the safest, healthiest meals.",
     descUrdu: "ہمارا AI آپ کی الرجی، بیماریاں اور پسند دیکھ کر محفوظ اور صحت مند کھانے بتاتا ہے۔",
     icon: "activity",
-    color: "#FF6B35",
+    color: theme.colors.primary,
   },
   {
     title: "Easy Payment",
@@ -44,7 +45,7 @@ const SLIDES = [
     desc: "Pay securely with Pakistan's most trusted mobile payment platforms.",
     descUrdu: "پاکستان کے سب سے معتبر موبائل ادائیگی پلیٹ فارم سے محفوظ ادائیگی کریں۔",
     icon: "credit-card",
-    color: "#8B5CF6",
+    color: theme.colors.secondary,
   },
   {
     title: "AI Voice Assistant",
@@ -54,7 +55,7 @@ const SLIDES = [
     desc: "Order food, get health advice and track orders — all by speaking in Urdu.",
     descUrdu: "کھانا آرڈر کریں، صحت کی مشورہ لیں اور آرڈر ٹریک کریں — سب اردو میں بول کر۔",
     icon: "mic",
-    color: "#3B82F6",
+    color: theme.colors.info,
   },
 ];
 
@@ -125,19 +126,19 @@ export default function Onboarding() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  hero: { height: "45%", alignItems: "center", justifyContent: "center", gap: 16 },
-  iconCircle: { width: 120, height: 120, borderRadius: 60, alignItems: "center", justifyContent: "center" },
-  heroTitle: { fontSize: 32, fontWeight: "800", color: "#fff", letterSpacing: -0.5 },
-  heroTitleUrdu: { fontSize: 20, color: "rgba(255,255,255,0.85)", fontWeight: "500" },
-  content: { flex: 1, padding: 32, justifyContent: "center" },
-  dots: { flexDirection: "row", gap: 6, marginBottom: 24 },
+  hero: { height: "45%", alignItems: "center", justifyContent: "center", gap: theme.spacing.md },
+  iconCircle: { width: 128, height: 128, borderRadius: 64, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "rgba(255,255,255,0.36)" },
+  heroTitle: { fontSize: theme.type.hero, fontFamily: theme.fonts.heading, color: "#fff", letterSpacing: -0.5 },
+  heroTitleUrdu: { fontSize: theme.type.body, color: "rgba(255,255,255,0.85)", fontFamily: theme.fonts.bodyMedium },
+  content: { flex: 1, padding: theme.spacing.xl, justifyContent: "center" },
+  dots: { flexDirection: "row", gap: theme.spacing.xs, marginBottom: theme.spacing.lg },
   dot: { height: 8, borderRadius: 4 },
-  subtitle: { fontSize: 22, fontWeight: "800", marginBottom: 4 },
-  subtitleUrdu: { fontSize: 15, marginBottom: 16 },
-  desc: { fontSize: 15, lineHeight: 24, marginBottom: 8 },
-  descUrdu: { fontSize: 14, lineHeight: 22, textAlign: "right" },
-  btn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: 16, marginTop: 32 },
-  btnText: { color: "#fff", fontSize: 17, fontWeight: "700" },
-  loginLink: { alignItems: "center", marginTop: 16 },
-  loginText: { fontSize: 14 },
+  subtitle: { fontSize: theme.type.display, fontFamily: theme.fonts.heading, marginBottom: 4 },
+  subtitleUrdu: { fontSize: theme.type.sm, marginBottom: theme.spacing.md },
+  desc: { fontSize: theme.type.body, lineHeight: 24, marginBottom: theme.spacing.xs },
+  descUrdu: { fontSize: theme.type.sm, lineHeight: 22, textAlign: "right" },
+  btn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10, padding: 18, borderRadius: theme.radius.md, marginTop: theme.spacing.xl },
+  btnText: { color: "#fff", fontSize: theme.type.body, fontFamily: theme.fonts.bodyBold },
+  loginLink: { alignItems: "center", marginTop: theme.spacing.md },
+  loginText: { fontSize: theme.type.sm },
 });
